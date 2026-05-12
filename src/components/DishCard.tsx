@@ -29,14 +29,15 @@ export default function DishCard({ dish, selected, onClick }: DishCardProps) {
 
   return (
     <div
-      onClick={onClick}
+      onClick={dish.available_today ? onClick : undefined}
       className={`
-        bg-white rounded-card border overflow-hidden transition-all cursor-pointer
-        hover:-translate-y-0.5 hover:shadow-card-hover
-        ${selected
+        bg-white rounded-card border overflow-hidden transition-all
+        ${dish.available_today ? 'cursor-pointer hover:-translate-y-0.5 hover:shadow-card-hover' : 'opacity-60 grayscale cursor-not-allowed'}
+        ${selected && dish.available_today
           ? 'border-saffron shadow-[0_0_0_3px_#FEF3DC]'
-          : 'border-border hover:border-saffron/50'
+          : 'border-border'
         }
+        ${dish.available_today && !selected ? 'hover:border-saffron/50' : ''}
       `}
     >
       {/* Image / emoji */}
@@ -104,7 +105,15 @@ export default function DishCard({ dish, selected, onClick }: DishCardProps) {
             >
               Details
             </Link>
-            {chef && <WhatsAppButton chef={chef as Chef} dish={dish as Dish} size="sm" label="Order" />}
+            {chef && (
+              dish.available_today ? (
+                <WhatsAppButton chef={chef as Chef} dish={dish as Dish} size="sm" label="Order" />
+              ) : (
+                <button disabled className="bg-gray-200 text-gray-500 px-3 py-1.5 rounded text-xs font-medium cursor-not-allowed">
+                  Not available today
+                </button>
+              )
+            )}
           </div>
         </div>
       </div>

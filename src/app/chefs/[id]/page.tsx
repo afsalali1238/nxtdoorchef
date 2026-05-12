@@ -58,17 +58,34 @@ export default async function ChefProfilePage({ params }: Props) {
             <div className="flex items-center gap-2 flex-wrap mb-1">
               <h1 className="font-display text-3xl font-bold">{c.name}</h1>
               {c.has_permit && (
-                <span className="text-xs font-medium text-verified bg-verified-bg px-2 py-0.5 rounded">🏛 Licensed</span>
+                <span title="This chef has a UAE food safety permit" className="text-xs font-medium text-verified bg-verified-bg px-2 py-0.5 rounded cursor-help">🏛 Licensed</span>
               )}
             </div>
-            <p className="text-white/60 mb-1">{c.cuisine_type} · 📍 {c.area}, Dubai</p>
-            {c.specialty && <p className="text-white/80 text-sm mt-2">{c.specialty}</p>}
+            
+            <div className="flex items-center gap-3 text-white/60 mb-3 text-sm">
+              <span>{c.cuisine_type}</span>
+              <span>·</span>
+              <span>📍 {c.area}, Dubai</span>
+              <span>·</span>
+              <span>Joined 2026</span>
+            </div>
+            
+            <div className="mb-4 inline-flex items-center gap-2">
+              <span className={`w-2 h-2 rounded-full ${availableDishes.length > 0 ? 'bg-green-500 shadow-[0_0_8px_rgba(34,197,94,0.6)]' : 'bg-red-500'}`}></span>
+              <span className="text-sm font-medium">{availableDishes.length > 0 ? 'Taking orders today' : 'Not taking orders today'}</span>
+            </div>
+
+            {c.specialty && <p className="text-white/80 text-sm mt-1">{c.specialty}</p>}
             {c.bio && <p className="text-white/55 text-sm mt-3 max-w-lg leading-relaxed">{c.bio}</p>}
-            <div className="flex items-center gap-3 mt-5">
+            
+            <div className="flex items-center gap-3 mt-6 flex-wrap">
               <WhatsAppButton chef={c} size="md" label="Chat on WhatsApp" />
               {c.accepts_custom && (
                 <WhatsAppButton chef={c} size="md" label="Custom order" variant="custom" />
               )}
+              <Link href={`/map?chef=${c.id}`} className="px-5 py-2.5 rounded text-sm font-medium border border-white/20 text-white hover:bg-white/10 transition-colors">
+                📍 Pin on map
+              </Link>
             </div>
           </div>
         </div>

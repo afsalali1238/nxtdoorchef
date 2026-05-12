@@ -58,21 +58,16 @@ export default async function HomePage() {
           Find the <em className="text-saffron not-italic">home chef</em><br />next door
         </h1>
         <p className="text-white/60 text-lg mt-5 mb-8 max-w-md font-light leading-relaxed relative z-10">
-          Authentic homemade food from real kitchens across Dubai. No restaurants. No shortcuts.
+          Find a South Indian tiffin in Karama, a Filipino home cook in Deira, or a Ugandan feast in Bur Dubai.
         </p>
 
-        {/* Search bar */}
-        <div className="flex bg-white rounded-full overflow-hidden shadow-2xl w-full max-w-lg relative z-10">
-          <input
-            className="flex-1 px-6 py-4 text-base outline-none text-dark placeholder:text-muted"
-            placeholder="Search cuisine, dish, or area…"
-            readOnly
-          />
+        {/* Browse Button */}
+        <div className="relative z-10">
           <Link
             href="/dishes"
-            className="bg-saffron px-7 py-4 text-sm font-medium text-dark whitespace-nowrap hover:bg-[#d4880a] transition-colors"
+            className="inline-flex items-center justify-center bg-saffron px-8 py-4 text-base font-medium text-dark rounded-full hover:bg-[#d4880a] hover:-translate-y-0.5 transition-all shadow-lg"
           >
-            Find food →
+            Browse all dishes →
           </Link>
         </div>
       </section>
@@ -148,7 +143,7 @@ export default async function HomePage() {
               Turn your recipes<br />into revenue
             </h2>
             <p className="text-white/55 mt-3 text-sm max-w-sm leading-relaxed">
-              Join home chefs across Dubai sharing their cuisine and earning from their passion — no commercial kitchen needed.
+              Join home chefs across Dubai sharing their cuisine and earning from their passion.
             </p>
           </div>
           <div className="flex gap-3 flex-shrink-0 relative z-10">

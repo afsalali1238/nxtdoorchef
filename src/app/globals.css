@@ -5,8 +5,7 @@
 @tailwind components;
 @tailwind utilities;
 
-/* ── Leaflet CSS — required for MapView ─────────────────────── */
-@import 'leaflet/dist/leaflet.css';
+/* ── Leaflet CSS moved to layout.tsx ─────────────────────── */
 
 /* ── Design Tokens ──────────────────────────────────────────── */
 :root {

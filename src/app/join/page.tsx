@@ -71,6 +71,18 @@ export default function JoinPage() {
     if (insertError) {
       setError('Something went wrong. Please try again.')
     } else {
+      // Send admin notification
+      await fetch('/api/join', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          name: form.name,
+          whatsapp: phone,
+          cuisine: form.cuisine_type,
+          area: form.area
+        })
+      }).catch(console.error)
+
       setSuccess(true)
     }
   }

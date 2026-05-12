@@ -51,7 +51,7 @@ export default function ChefCard({ chef, selected, onClick }: ChefCardProps) {
             <div className="flex items-center gap-1.5 flex-wrap">
               <h3 className="font-body font-medium text-dark">{chef.name}</h3>
               {chef.has_permit && (
-                <span className="text-[10px] font-medium text-verified bg-verified-bg px-1.5 py-0.5 rounded">
+                <span title="This chef has a UAE food safety permit" className="text-[10px] font-medium text-verified bg-verified-bg px-1.5 py-0.5 rounded cursor-help">
                   🏛 Licensed
                 </span>
               )}
