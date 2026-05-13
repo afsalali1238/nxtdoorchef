@@ -38,7 +38,7 @@ async function seedPosts() {
     },
     {
       chefName: 'Nour',
-      photo_url: 'https://images.unsplash.com/photo-1548943487-a2e4d43b4851?q=80&w=600&auto=format&fit=crop',
+      photo_url: 'https://images.unsplash.com/photo-1541518763669-27fef04b14ea?q=80&w=600&auto=format&fit=crop',
       dish_name: 'Warak Enab (Vine Leaves)',
       cultural_note: 'Rolling vine leaves is meditation. In Syria, we do it together as a family, passing stories across generations.',
     },
