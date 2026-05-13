@@ -21,47 +21,57 @@ async function seedPosts() {
     return;
   }
 
+  console.log(`Found ${chefs.length} approved chefs:`, chefs.map(c => c.name).join(', '));
+
   const posts = [
     {
       chefName: 'Ahmad',
-      image_url: 'https://images.unsplash.com/photo-1563379091339-03b21ab4a4f8?q=80&w=600&auto=format&fit=crop', // generic food
-      caption: 'Just finished a big pot of Machboos. The smell of cardamom is filling the whole house! 🥘',
+      photo_url: 'https://images.unsplash.com/photo-1563379091339-03b21ab4a4f8?q=80&w=600&auto=format&fit=crop',
+      dish_name: 'Chicken Machboos',
+      cultural_note: 'This is the dish my grandmother made every Friday. The smell of cardamom takes me back to her kitchen in Al Ain.',
     },
     {
       chefName: 'Fatima',
-      image_url: 'https://images.unsplash.com/photo-1628294895950-9805252327bc?q=80&w=600&auto=format&fit=crop',
-      caption: 'Fresh Halwa Puri ready for the weekend! Come by and say hello. 🍞',
+      photo_url: 'https://images.unsplash.com/photo-1628294895950-9805252327bc?q=80&w=600&auto=format&fit=crop',
+      dish_name: 'Halwa Puri',
+      cultural_note: 'In Pakistan, Sunday mornings mean Halwa Puri. My mother taught me the exact ratio of semolina to ghee.',
     },
     {
       chefName: 'Nour',
-      image_url: 'https://images.unsplash.com/photo-1548943487-a2e4d43b4851?q=80&w=600&auto=format&fit=crop',
-      caption: 'Rolling fresh vine leaves today. It takes time, but it’s so worth it.',
+      photo_url: 'https://images.unsplash.com/photo-1548943487-a2e4d43b4851?q=80&w=600&auto=format&fit=crop',
+      dish_name: 'Warak Enab (Vine Leaves)',
+      cultural_note: 'Rolling vine leaves is meditation. In Syria, we do it together as a family, passing stories across generations.',
     },
     {
       chefName: 'Sanjeev',
-      image_url: 'https://images.unsplash.com/photo-1585937421612-70a008356fbe?q=80&w=600&auto=format&fit=crop',
-      caption: 'Butter chicken simmering. The secret is finishing it with Kasuri Methi. 🍛',
+      photo_url: 'https://images.unsplash.com/photo-1585937421612-70a008356fbe?q=80&w=600&auto=format&fit=crop',
+      dish_name: 'Butter Chicken',
+      cultural_note: 'The secret is finishing with Kasuri Methi. This is how my father made it in our dhaba in Amritsar.',
     }
   ];
 
   for (const p of posts) {
     const chef = chefs.find(c => c.name === p.chefName);
-    if (!chef) continue;
+    if (!chef) {
+      console.log(`Chef "${p.chefName}" not found — skipping`);
+      continue;
+    }
 
     const { error } = await supabase.from('posts').insert({
       chef_id: chef.id,
-      image_url: p.image_url,
-      caption: p.caption,
+      photo_url: p.photo_url,
+      dish_name: p.dish_name,
+      cultural_note: p.cultural_note,
     });
 
     if (error) {
       console.error(`Error inserting post for ${p.chefName}:`, error);
     } else {
-      console.log(`Inserted post for ${p.chefName}`);
+      console.log(`✓ Posted "${p.dish_name}" by ${p.chefName}`);
     }
   }
 
-  console.log("Post seeding complete!");
+  console.log("\nPost seeding complete!");
 }
 
 seedPosts().catch(console.error);
