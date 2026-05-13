@@ -5,10 +5,10 @@ import { notFound } from 'next/navigation'
 import Image from 'next/image'
 import Link from 'next/link'
 import { createClient } from '@/lib/supabase/server'
-import DishCard from '@/components/DishCard'
+import PostCard from '@/components/PostCard'
 import WhatsAppButton from '@/components/WhatsAppButton'
 import type { Metadata } from 'next'
-import type { Chef, Dish } from '@/types'
+import type { Chef, Post } from '@/types'
 
 interface Props { params: { id: string } }
 
@@ -33,16 +33,17 @@ export default async function ChefProfilePage({ params }: Props) {
 
   const { data: chef } = await supabase
     .from('chefs')
-    .select('*, dishes(*)')
+    .select('*, posts(*)')
     .eq('id', params.id)
     .eq('is_approved', true)
     .single()
 
   if (!chef) notFound()
 
-  const c = chef as Chef & { dishes: Dish[] }
-  const availableDishes = c.dishes?.filter(d => d.available_today) ?? []
-  const otherDishes = c.dishes?.filter(d => !d.available_today) ?? []
+  const c = chef as Chef & { posts: Post[] }
+  const sortedPosts = [...(c.posts || [])].sort((a, b) => new Date(b.created_at).getTime() - new Date(a.created_at).getTime())
+  const todaysPost = sortedPosts.length > 0 && new Date(sortedPosts[0].created_at).toDateString() === new Date().toDateString() ? sortedPosts[0] : null
+  const pastPosts = todaysPost ? sortedPosts.slice(1) : sortedPosts
 
   return (
     <div className="pt-nav min-h-screen">
@@ -57,32 +58,36 @@ export default async function ChefProfilePage({ params }: Props) {
           <div className="flex-1">
             <div className="flex items-center gap-2 flex-wrap mb-1">
               <h1 className="font-display text-3xl font-bold">{c.name}</h1>
-              {c.has_permit && (
-                <span title="This chef has a UAE food safety permit" className="text-xs font-medium text-verified bg-verified-bg px-2 py-0.5 rounded cursor-help">🏛 Licensed</span>
-              )}
             </div>
             
             <div className="flex items-center gap-3 text-white/60 mb-3 text-sm">
               <span>{c.cuisine_type}</span>
               <span>·</span>
               <span>📍 {c.area}, Dubai</span>
-              <span>·</span>
-              <span>Joined 2026</span>
+              {c.from_city && c.from_country && (
+                <>
+                  <span>·</span>
+                  <span>From {c.from_city}, {c.from_country}</span>
+                </>
+              )}
             </div>
             
             <div className="mb-4 inline-flex items-center gap-2">
-              <span className={`w-2 h-2 rounded-full ${availableDishes.length > 0 ? 'bg-green-500 shadow-[0_0_8px_rgba(34,197,94,0.6)]' : 'bg-red-500'}`}></span>
-              <span className="text-sm font-medium">{availableDishes.length > 0 ? 'Taking orders today' : 'Not taking orders today'}</span>
+              <span className={`w-2 h-2 rounded-full ${todaysPost ? 'bg-green-500 shadow-[0_0_8px_rgba(34,197,94,0.6)]' : 'bg-white/20'}`}></span>
+              <span className="text-sm font-medium">{todaysPost ? 'Cooking today' : 'Not cooking today'}</span>
             </div>
 
+            {c.cooking_philosophy && (
+              <blockquote className="text-white border-l-2 border-saffron pl-4 italic text-lg mb-4">
+                "{c.cooking_philosophy}"
+              </blockquote>
+            )}
+            
             {c.specialty && <p className="text-white/80 text-sm mt-1">{c.specialty}</p>}
             {c.bio && <p className="text-white/55 text-sm mt-3 max-w-lg leading-relaxed">{c.bio}</p>}
             
             <div className="flex items-center gap-3 mt-6 flex-wrap">
-              <WhatsAppButton chef={c} size="md" label="Chat on WhatsApp" />
-              {c.accepts_custom && (
-                <WhatsAppButton chef={c} size="md" label="Custom order" variant="custom" />
-              )}
+              <WhatsAppButton chef={c} size="md" label="Say hello" />
               <Link href={`/map?chef=${c.id}`} className="px-5 py-2.5 rounded text-sm font-medium border border-white/20 text-white hover:bg-white/10 transition-colors">
                 📍 Pin on map
               </Link>
@@ -91,38 +96,36 @@ export default async function ChefProfilePage({ params }: Props) {
         </div>
       </div>
 
-      {/* Menu */}
+      {/* Feed */}
       <div className="max-w-4xl mx-auto px-8 py-12">
-        {availableDishes.length > 0 && (
+        {todaysPost && (
           <section className="mb-12">
-            <p className="section-label">Available today</p>
-            <h2 className="font-display text-2xl font-bold mb-6">Today&apos;s menu</h2>
-            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
-              {availableDishes.map(dish => (
-                <DishCard key={dish.id} dish={{ ...dish, chefs: c }} />
-              ))}
+            <p className="section-label">Cooking today</p>
+            <h2 className="font-display text-2xl font-bold mb-6">What {c.name} is cooking today</h2>
+            <div className="max-w-md">
+              <PostCard post={{ ...todaysPost, chefs: c }} />
             </div>
           </section>
         )}
 
-        {otherDishes.length > 0 && (
+        {pastPosts.length > 0 && (
           <section>
-            <p className="section-label">Full menu</p>
-            <h2 className="font-display text-2xl font-bold mb-6">All dishes</h2>
-            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 opacity-60">
-              {otherDishes.map(dish => (
-                <DishCard key={dish.id} dish={{ ...dish, chefs: c }} />
+            <p className="section-label">Past cooking</p>
+            <h2 className="font-display text-2xl font-bold mb-6">Recently shared</h2>
+            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6 opacity-80">
+              {pastPosts.map(post => (
+                <PostCard key={post.id} post={{ ...post, chefs: c }} />
               ))}
             </div>
           </section>
         )}
 
-        {c.dishes?.length === 0 && (
+        {sortedPosts.length === 0 && (
           <div className="py-20 text-center">
-            <p className="text-4xl mb-4">🍽️</p>
-            <p className="font-display text-xl font-semibold mb-2">Menu coming soon</p>
-            <p className="text-muted text-sm mb-6">Chat with {c.name} directly to ask about today&apos;s dishes</p>
-            <WhatsAppButton chef={c} size="lg" />
+            <p className="text-4xl mb-4">📸</p>
+            <p className="font-display text-xl font-semibold mb-2">No posts yet</p>
+            <p className="text-muted text-sm mb-6">Say hello to {c.name} to see what they're cooking</p>
+            <WhatsAppButton chef={c} size="lg" label="Say hello" />
           </div>
         )}
 

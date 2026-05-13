@@ -20,6 +20,7 @@ interface SplitLayoutProps {
   chefs: Chef[]
   selectedChefId?: string | null
   onChefSelect?: (id: string) => void
+  activeChefIds?: string[]
   panelHeader: React.ReactNode
   children: React.ReactNode
 }
@@ -28,6 +29,7 @@ export default function SplitLayout({
   chefs,
   selectedChefId,
   onChefSelect,
+  activeChefIds = [],
   panelHeader,
   children,
 }: SplitLayoutProps) {
@@ -53,6 +55,7 @@ export default function SplitLayout({
           chefs={chefs}
           selectedChefId={selectedChefId}
           onChefSelect={onChefSelect}
+          activeChefIds={activeChefIds}
           height="100%"
         />
       </div>

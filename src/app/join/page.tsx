@@ -25,8 +25,9 @@ export default function JoinPage() {
     cuisine_type: '',
     specialty: '',
     area: '',
-    has_permit: false,
-    accepts_custom: true,
+    from_city: '',
+    from_country: '',
+    cooking_philosophy: '',
   })
 
   const set = (key: string, val: string | boolean) =>
@@ -62,8 +63,9 @@ export default function JoinPage() {
       area: form.area,
       lat: coords.lat,
       lng: coords.lng,
-      has_permit: form.has_permit,
-      accepts_custom: form.accepts_custom,
+      from_city: form.from_city || null,
+      from_country: form.from_country || null,
+      cooking_philosophy: form.cooking_philosophy || null,
       is_approved: false, // always false — admin approves
     })
 
@@ -79,7 +81,9 @@ export default function JoinPage() {
           name: form.name,
           whatsapp: phone,
           cuisine: form.cuisine_type,
-          area: form.area
+          area: form.area,
+          from_city: form.from_city,
+          from_country: form.from_country
         })
       }).catch(console.error)
 
@@ -92,9 +96,9 @@ export default function JoinPage() {
       <div className="pt-nav min-h-screen flex items-center justify-center px-6">
         <div className="text-center max-w-md">
           <p className="text-5xl mb-5">🎉</p>
-          <h1 className="font-display text-3xl font-bold mb-3">You're on the list!</h1>
+          <h1 className="font-display text-3xl font-bold mb-3">Welcome to the community!</h1>
           <p className="text-muted leading-relaxed mb-6">
-            We've received your application. We'll review it and activate your profile within 24 hours. We'll WhatsApp you when you're live.
+            We'll review your profile and add you within 24 hours. Once you're live, you can start sharing what you cook — your neighbours will discover you on the map and feed.
           </p>
           <button onClick={() => router.push('/')} className="btn-primary">Back to home</button>
         </div>
@@ -106,9 +110,9 @@ export default function JoinPage() {
     <div className="pt-nav min-h-screen">
       <div className="max-w-xl mx-auto px-6 py-14">
         <p className="section-label">For home chefs</p>
-        <h1 className="font-display text-4xl font-bold mb-2">List your kitchen</h1>
+        <h1 className="font-display text-4xl font-bold mb-2">Share your culture</h1>
         <p className="text-muted mb-10 leading-relaxed">
-          Share your cuisine with Dubai. We'll review your profile and get you live within 24 hours.
+          Join home cooks from across the world sharing their cuisine with Dubai. Tell us about yourself and we'll add you to the community within 24 hours.
         </p>
 
         <form onSubmit={handleSubmit} className="space-y-5">
@@ -148,44 +152,45 @@ export default function JoinPage() {
             <label className="text-sm font-medium text-dark block mb-1.5">WhatsApp number *</label>
             <input required value={form.whatsapp} onChange={e => set('whatsapp', e.target.value)}
               className="input-field" placeholder="e.g. 0501234567" type="tel" />
-            <p className="text-xs text-muted mt-1">Buyers will contact you directly. UAE numbers only.</p>
+            <p className="text-xs text-muted mt-1">Neighbours who want to connect will reach you here. UAE numbers only.</p>
+          </div>
+
+          {/* Origin */}
+          <div className="grid grid-cols-2 gap-4">
+            <div>
+              <label className="text-sm font-medium text-dark block mb-1.5">City/Town of origin</label>
+              <input value={form.from_city} onChange={e => set('from_city', e.target.value)}
+                className="input-field" placeholder="e.g. Thrissur" />
+            </div>
+            <div>
+              <label className="text-sm font-medium text-dark block mb-1.5">Country</label>
+              <input value={form.from_country} onChange={e => set('from_country', e.target.value)}
+                className="input-field" placeholder="e.g. Kerala, India" />
+            </div>
           </div>
 
           {/* Specialty */}
           <div>
-            <label className="text-sm font-medium text-dark block mb-1.5">Your specialty</label>
+            <label className="text-sm font-medium text-dark block mb-1.5">Your signature dish</label>
             <input value={form.specialty} onChange={e => set('specialty', e.target.value)}
-              className="input-field" placeholder="e.g. Known for Kerala fish curry and homemade papadams" />
+              className="input-field" placeholder="The dish you're most proud of" />
+          </div>
+
+          {/* Philosophy */}
+          <div>
+            <label className="text-sm font-medium text-dark block mb-1.5">Your cooking philosophy</label>
+            <input value={form.cooking_philosophy} onChange={e => set('cooking_philosophy', e.target.value)}
+              className="input-field" placeholder="e.g. I cook the food I grew up eating." />
           </div>
 
           {/* Bio */}
           <div>
-            <label className="text-sm font-medium text-dark block mb-1.5">About you</label>
+            <label className="text-sm font-medium text-dark block mb-1.5">Your story</label>
             <textarea value={form.bio} onChange={e => set('bio', e.target.value)}
               className="input-field resize-none" rows={3}
-              placeholder="Tell buyers your story — where you're from, how you learned to cook..." />
+              placeholder="Tell us your story — where you're from, how you learned to cook..." />
           </div>
 
-          {/* Checkboxes */}
-          <div className="space-y-3">
-            <label className="flex items-start gap-3 cursor-pointer">
-              <input type="checkbox" checked={form.has_permit}
-                onChange={e => set('has_permit', e.target.checked)}
-                className="mt-0.5 accent-saffron" />
-              <span className="text-sm text-dark">
-                I have a UAE home kitchen / food safety permit
-                <span className="block text-xs text-muted mt-0.5">A "Licensed" badge will appear on your profile</span>
-              </span>
-            </label>
-            <label className="flex items-start gap-3 cursor-pointer">
-              <input type="checkbox" checked={form.accepts_custom}
-                onChange={e => set('accepts_custom', e.target.checked)}
-                className="mt-0.5 accent-saffron" />
-              <span className="text-sm text-dark">
-                I accept custom orders (birthday cakes, special requests, etc.)
-              </span>
-            </label>
-          </div>
 
           {/* Error */}
           {error && (
@@ -195,7 +200,7 @@ export default function JoinPage() {
           {/* Submit */}
           <button type="submit" disabled={loading}
             className={cn('btn-primary w-full justify-center', loading && 'opacity-60 cursor-not-allowed')}>
-            {loading ? 'Submitting…' : 'Submit my kitchen →'}
+            {loading ? 'Submitting…' : 'Join the community →'}
           </button>
         </form>
       </div>

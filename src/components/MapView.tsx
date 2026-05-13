@@ -16,19 +16,22 @@ import { DUBAI_MAP_CENTER, DUBAI_MAP_ZOOM, CHEF_PIN_EMOJI } from '@/lib/constant
 import type { Chef } from '@/types'
 
 // Chef map pin — divIcon avoids broken default Leaflet icons in webpack
-function chefPin(active = false) {
+function chefPin(active = false, hasPost = false) {
   return L.divIcon({
     className: '',
-    html: `<div style="
-      background: ${active ? '#C4522A' : '#E8960A'};
-      width: 40px; height: 40px;
-      border-radius: 50%;
-      border: 2.5px solid white;
-      box-shadow: 0 2px 10px rgba(0,0,0,.22);
-      display: flex; align-items: center; justify-content: center;
-      font-size: 20px;
-      transition: all .2s;
-    ">${CHEF_PIN_EMOJI}</div>`,
+    html: `<div style="position: relative;">
+      <div style="
+        background: ${active ? '#C4522A' : '#E8960A'};
+        width: 40px; height: 40px;
+        border-radius: 50%;
+        border: 2.5px solid white;
+        box-shadow: 0 2px 10px rgba(0,0,0,.22);
+        display: flex; align-items: center; justify-content: center;
+        font-size: 20px;
+        transition: all .2s;
+      ">${CHEF_PIN_EMOJI}</div>
+      ${hasPost ? `<div style="position: absolute; top: -2px; right: -2px; width: 14px; height: 14px; background: #22c55e; border: 2px solid white; border-radius: 50%;"></div>` : ''}
+    </div>`,
     iconSize: [40, 40],
     iconAnchor: [20, 20],
     popupAnchor: [0, -24],
@@ -39,6 +42,7 @@ interface MapViewProps {
   chefs: Chef[]
   selectedChefId?: string | null
   onChefSelect?: (chefId: string) => void
+  activeChefIds?: string[]
   height?: string
 }
 
@@ -46,6 +50,7 @@ export default function MapView({
   chefs,
   selectedChefId,
   onChefSelect,
+  activeChefIds = [],
   height = '100%',
 }: MapViewProps) {
   const validChefs = chefs.filter(c => c.lat && c.lng)
@@ -67,7 +72,7 @@ export default function MapView({
           <Marker
             key={chef.id}
             position={[chef.lat!, chef.lng!]}
-            icon={chefPin(chef.id === selectedChefId)}
+            icon={chefPin(chef.id === selectedChefId, activeChefIds.includes(chef.id))}
             eventHandlers={{ click: () => onChefSelect?.(chef.id) }}
           >
             <Popup maxWidth={240}>

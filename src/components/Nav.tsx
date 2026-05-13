@@ -8,8 +8,8 @@ import { cn } from '@/lib/utils'
 
 const NAV_LINKS = [
   { href: '/',        label: 'Home' },
-  { href: '/dishes',  label: 'Browse dishes' },
-  { href: '/chefs',   label: 'Find chefs' },
+  { href: '/feed',    label: 'Live feed' },
+  { href: '/chefs',   label: 'Our cooks' },
   { href: '/map',     label: 'Map' },
 ]
 

@@ -6,7 +6,6 @@ import { createClient } from '@/lib/supabase/server'
 import ChefCard from '@/components/ChefCard'
 import SplitLayout from '@/components/SplitLayout'
 import CuisineFilter from '@/components/CuisineFilter'
-import AreaFilter from '@/components/AreaFilter'
 import SkeletonCard from '@/components/SkeletonCard'
 import type { Metadata } from 'next'
 import type { Chef } from '@/types'
@@ -19,7 +18,7 @@ export const metadata: Metadata = {
 export default async function ChefsPage({
   searchParams,
 }: {
-  searchParams: { cuisine?: string; area?: string }
+  searchParams: { cuisine?: string; q?: string }
 }) {
   const supabase = createClient()
 
@@ -33,8 +32,8 @@ export default async function ChefsPage({
   if (searchParams.cuisine && searchParams.cuisine !== 'All') {
     query = query.eq('cuisine_type', searchParams.cuisine)
   }
-  if (searchParams.area && searchParams.area !== 'All') {
-    query = query.eq('area', searchParams.area)
+  if (searchParams.q) {
+    query = query.ilike('name', `%${searchParams.q}%`)
   }
 
   const { data: chefs } = await query
@@ -47,14 +46,33 @@ export default async function ChefsPage({
     .eq('is_approved', true)
     .eq('is_active', true)
 
+  // Get active chefs for today (those who posted today)
+  const today = new Date()
+  today.setHours(0, 0, 0, 0)
+  const { data: todayPosts } = await supabase
+    .from('posts')
+    .select('chef_id')
+    .gte('created_at', today.toISOString())
+
+  const activeChefIds = Array.from(new Set((todayPosts || []).map(p => p.chef_id)))
+
   const panelHeader = (
     <div className="p-4 space-y-3">
       <div>
-        <h1 className="font-display text-xl font-bold">Find chefs</h1>
-        <p className="text-xs text-muted mt-0.5">{chefList.length} chef{chefList.length !== 1 ? 's' : ''} found</p>
+        <h1 className="font-display text-xl font-bold">Our cooks</h1>
+        <p className="text-xs text-muted mt-0.5">{chefList.length} cook{chefList.length !== 1 ? 's' : ''} found</p>
       </div>
       <Suspense><CuisineFilter selected={searchParams.cuisine ?? 'All'} /></Suspense>
-      <Suspense><AreaFilter selected={searchParams.area ?? 'All'} /></Suspense>
+      <form action="/chefs" method="GET" className="flex gap-2">
+        {searchParams.cuisine && <input type="hidden" name="cuisine" value={searchParams.cuisine} />}
+        <input 
+          type="text" 
+          name="q" 
+          defaultValue={searchParams.q || ''} 
+          placeholder="Search by name..." 
+          className="w-full bg-cream border border-border rounded-full px-4 py-2 text-sm focus:outline-none focus:border-saffron"
+        />
+      </form>
     </div>
   )
 
@@ -62,6 +80,7 @@ export default async function ChefsPage({
     <SplitLayout
       chefs={(allChefs ?? []) as Chef[]}
       panelHeader={panelHeader}
+      activeChefIds={activeChefIds}
     >
       <Suspense fallback={<SkeletonCard count={4} />}>
         {chefList.map(chef => (

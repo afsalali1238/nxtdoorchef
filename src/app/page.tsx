@@ -6,11 +6,11 @@ import { Suspense } from 'react'
 import Link from 'next/link'
 import { createClient } from '@/lib/supabase/server'
 import ChefGrid from '@/components/ChefGrid'
-import DishGrid from '@/components/DishGrid'
+import PostCard from '@/components/PostCard'
 import CuisineFilter from '@/components/CuisineFilter'
 import SkeletonCard from '@/components/SkeletonCard'
 import type { Metadata } from 'next'
-import type { Chef, Dish } from '@/types'
+import type { Chef, Post } from '@/types'
 
 export const metadata: Metadata = {
   title: 'NextDoorChef — Homemade Food in Dubai',
@@ -20,11 +20,10 @@ export const metadata: Metadata = {
 export default async function HomePage() {
   const supabase = createClient()
 
-  // Featured dishes (available today, 4 max)
-  const { data: dishes } = await supabase
-    .from('dishes')
+  // Feed preview (latest 4 posts)
+  const { data: posts } = await supabase
+    .from('posts')
     .select('*, chefs(id, name, area, whatsapp, photo_url, specialty)')
-    .eq('available_today', true)
     .order('created_at', { ascending: false })
     .limit(4)
 
@@ -53,7 +52,7 @@ export default async function HomePage() {
             style={{ background: 'radial-gradient(circle, #C4522A 0%, transparent 65%)', transform: 'translate(-30%,30%)' }} />
         </div>
 
-        <p className="section-label relative z-10">Dubai's home chef marketplace</p>
+        <p className="section-label relative z-10">Dubai's home chef community</p>
         <h1 className="font-display text-5xl md:text-6xl font-bold text-white leading-tight max-w-2xl relative z-10 mt-2">
           Find the <em className="text-saffron not-italic">home chef</em><br />next door
         </h1>
@@ -64,10 +63,10 @@ export default async function HomePage() {
         {/* Browse Button */}
         <div className="relative z-10">
           <Link
-            href="/dishes"
+            href="/feed"
             className="inline-flex items-center justify-center bg-saffron px-8 py-4 text-base font-medium text-dark rounded-full hover:bg-[#d4880a] hover:-translate-y-0.5 transition-all shadow-lg"
           >
-            Browse all dishes →
+            Today's kitchen →
           </Link>
         </div>
       </section>
@@ -86,8 +85,8 @@ export default async function HomePage() {
         <div className="grid grid-cols-1 md:grid-cols-3 gap-5">
           {[
             { n: '01', title: 'Browse the map', body: 'Discover home chefs near you. Filter by cuisine, dietary need, or area of Dubai.' },
-            { n: '02', title: 'Message the chef', body: 'Tap "Order on WhatsApp" to connect directly. Arrange custom portions or special requests.' },
-            { n: '03', title: 'Enjoy at home', body: 'Fresh, made-to-order food from a real home kitchen. Leave a review to help others.' },
+            { n: '02', title: 'Message the chef', body: 'Tap "Say hello" to connect directly. Learn about their culture and cooking.' },
+            { n: '03', title: 'Connect locally', body: 'Meet your neighbours and discover the diverse cultures cooking next door.' },
           ].map(s => (
             <div key={s.n} className="bg-white rounded-card border border-border p-7">
               <p className="font-display text-5xl font-bold text-saffron leading-none">{s.n}</p>
@@ -98,19 +97,23 @@ export default async function HomePage() {
         </div>
       </section>
 
-      {/* ── Featured Dishes ───────────────────────────── */}
+      {/* ── Feed Preview ───────────────────────────── */}
       <section className="px-8 pb-16">
         <div className="flex items-end justify-between mb-7">
           <div>
-            <p className="section-label">Today&apos;s picks</p>
-            <h2 className="font-display text-3xl font-bold">Featured dishes</h2>
+            <p className="section-label">Happening now</p>
+            <h2 className="font-display text-3xl font-bold">Today's kitchen</h2>
           </div>
-          <Link href="/dishes" className="text-sm text-saffron font-medium hover:underline">
-            See all dishes →
+          <Link href="/feed" className="text-sm text-saffron font-medium hover:underline">
+            See the live feed →
           </Link>
         </div>
         <Suspense fallback={<div className="grid grid-cols-4 gap-4"><SkeletonCard count={4} variant="dish" /></div>}>
-          <DishGrid dishes={(dishes ?? []) as (Dish & { chefs?: Chef })[]} columns={4} />
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
+            {((posts ?? []) as (Post & { chefs: Chef })[]).map(post => (
+              <PostCard key={post.id} post={post} />
+            ))}
+          </div>
         </Suspense>
       </section>
 
@@ -118,11 +121,11 @@ export default async function HomePage() {
       <section className="bg-white border-t border-border px-8 py-16">
         <div className="flex items-end justify-between mb-7">
           <div>
-            <p className="section-label">Meet the chefs</p>
-            <h2 className="font-display text-3xl font-bold">Chefs near you</h2>
+            <p className="section-label">Meet the community</p>
+            <h2 className="font-display text-3xl font-bold">Cooks near you</h2>
           </div>
           <Link href="/chefs" className="text-sm text-saffron font-medium hover:underline">
-            Meet all chefs →
+            Our cooks →
           </Link>
         </div>
         <Suspense fallback={<div className="grid grid-cols-3 gap-4"><SkeletonCard count={3} /></div>}>
@@ -140,15 +143,15 @@ export default async function HomePage() {
           <div className="relative z-10">
             <p className="section-label">For home chefs</p>
             <h2 className="font-display text-3xl font-bold text-white mt-1 leading-snug">
-              Turn your recipes<br />into revenue
+              Cook something today.<br />Share it with your neighbours.
             </h2>
             <p className="text-white/55 mt-3 text-sm max-w-sm leading-relaxed">
-              Join home chefs across Dubai sharing their cuisine and earning from their passion.
+              Join home cooks across Dubai celebrating their cuisine — no selling required. Just sharing.
             </p>
           </div>
           <div className="flex gap-3 flex-shrink-0 relative z-10">
             <Link href="/join" className="bg-saffron text-dark px-6 py-3 rounded-lg text-sm font-medium hover:opacity-90 transition-opacity">
-              List your kitchen
+              Share your culture
             </Link>
             <button className="border border-white/30 text-white px-6 py-3 rounded-lg text-sm hover:border-white transition-colors">
               Learn more

@@ -136,6 +136,11 @@
 - Scaffolding files created: package.json, configs, globals.css, types, utils, constants
 - Status: Ready for first Antigravity build session
 
+### Session 1 — Pivot Implementation (Current)
+- **Priority 1 (Language & Legal Cleanup):** Completed. Removed prices, commercial framing, and has_permit/accepts_custom badges. Changed WhatsApp CTAs to "Say hello".
+- **Priority 5 (/join Page Rewrite):** Completed. Updated to community framing ("Share your culture"). Added `from_city`, `from_country`, `cooking_philosophy`. Removed commercial checkboxes.
+- **Priority 6 (Legal Pages & Cleanup):** Map bug fixed, mobile layout updated, Resend integrated in previous work.
+
 ---
 
 ## Reference Links

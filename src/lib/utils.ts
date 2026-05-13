@@ -11,22 +11,21 @@ export function cn(...inputs: ClassValue[]) {
   return twMerge(clsx(inputs))
 }
 
-// ── WhatsApp URL Builders ────────────────────────────────────
-// Buyer wants to order a specific dish
-export function dishOrderUrl(chef: Chef, dish: Dish): string {
-  const msg = `Hello ${chef.name}! I found you on NextDoorChef and I'd like to order: *${dish.name}*. Is it available today?`
+// Buyer wants to connect from a dish
+export function dishOrderUrl(chef: Chef, dish?: Dish): string {
+  const msg = `Hello ${chef.name}! I found you on NextDoorChef and loved what you're cooking today. I'd love to connect!`
   return `https://wa.me/${chef.whatsapp}?text=${encodeURIComponent(msg)}`
 }
 
-// Buyer wants to see today's menu (from chef card / chef profile)
+// Buyer wants to connect from chef profile
 export function chefMenuUrl(chef: Chef): string {
-  const msg = `Hello ${chef.name}! I found you on NextDoorChef. Can you share today's menu and availability?`
+  const msg = `Hello ${chef.name}! I found you on NextDoorChef and loved what you're cooking today. I'd love to connect!`
   return `https://wa.me/${chef.whatsapp}?text=${encodeURIComponent(msg)}`
 }
 
-// Buyer has a custom order request
+// Buyer wants to connect (custom order removed/adapted)
 export function customOrderUrl(chef: Chef): string {
-  const msg = `Hello ${chef.name}! I found you on NextDoorChef. I have a custom order request — are you available to help?`
+  const msg = `Hello ${chef.name}! I found you on NextDoorChef and loved what you're cooking today. I'd love to connect!`
   return `https://wa.me/${chef.whatsapp}?text=${encodeURIComponent(msg)}`
 }
 

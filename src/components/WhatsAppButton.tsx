@@ -40,7 +40,7 @@ export default function WhatsAppButton({
   if (!chef?.whatsapp) return null
 
   const url = variant === 'custom' ? customOrderUrl(chef) : (dish ? dishOrderUrl(chef, dish) : chefMenuUrl(chef))
-  const defaultLabel = dish ? 'Order' : 'Chat on WhatsApp'
+  const defaultLabel = 'Say hello'
   const s = SIZE[size]
 
   return (

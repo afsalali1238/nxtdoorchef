@@ -50,11 +50,6 @@ export default function ChefCard({ chef, selected, onClick }: ChefCardProps) {
           <div className="flex-1 min-w-0">
             <div className="flex items-center gap-1.5 flex-wrap">
               <h3 className="font-body font-medium text-dark">{chef.name}</h3>
-              {chef.has_permit && (
-                <span title="This chef has a UAE food safety permit" className="text-[10px] font-medium text-verified bg-verified-bg px-1.5 py-0.5 rounded cursor-help">
-                  🏛 Licensed
-                </span>
-              )}
             </div>
             <p className="text-xs text-muted mt-0.5">
               {chef.cuisine_type} · 📍 {chef.area}
@@ -69,11 +64,6 @@ export default function ChefCard({ chef, selected, onClick }: ChefCardProps) {
           </p>
         )}
 
-        {/* Custom orders badge */}
-        {chef.accepts_custom && (
-          <p className="text-xs text-muted mb-3">✏️ Accepts custom orders</p>
-        )}
-
         {/* Footer: WhatsApp + profile link */}
         <div className="flex items-center justify-between gap-2">
           <Link
@@ -81,7 +71,7 @@ export default function ChefCard({ chef, selected, onClick }: ChefCardProps) {
             onClick={e => e.stopPropagation()}
             className="text-sm text-muted hover:text-dark transition-colors"
           >
-            View menu →
+            View profile →
           </Link>
           <WhatsAppButton chef={chef} size="sm" />
         </div>

@@ -15,11 +15,23 @@ export interface Chef {
   lng: number | null
   is_approved: boolean
   is_active: boolean
-  has_permit: boolean        // UAE DET food safety permit
-  accepts_custom: boolean    // willing to do custom orders
+  from_city: string | null
+  from_country: string | null
+  cooking_philosophy: string | null
   created_at: string
-  // joined relation (optional — only when fetched with dishes)
+  // joined relations
   dishes?: Dish[]
+  posts?: Post[]
+}
+
+export interface Post {
+  id: string
+  chef_id: string
+  image_url: string
+  caption: string | null
+  created_at: string
+  // joined relation
+  chefs?: Pick<Chef, 'id' | 'name' | 'area' | 'whatsapp' | 'photo_url'>
 }
 
 export interface Dish {

@@ -7,7 +7,6 @@
 import Image from 'next/image'
 import Link from 'next/link'
 import WhatsAppButton from './WhatsAppButton'
-import { formatAED } from '@/lib/utils'
 import type { Dish, Chef } from '@/types'
 
 interface DishCardProps {
@@ -94,27 +93,24 @@ export default function DishCard({ dish, selected, onClick }: DishCardProps) {
           </div>
         )}
 
-        {/* Price + action */}
-        <div className="flex items-center justify-between gap-2">
-          <span className="font-semibold text-terra">{formatAED(dish.price_aed)}</span>
-          <div className="flex items-center gap-2">
-            <Link
-              href={`/dishes/${dish.id}`}
-              onClick={e => e.stopPropagation()}
-              className="text-xs text-muted hover:text-dark transition-colors"
-            >
-              Details
-            </Link>
-            {chef && (
-              dish.available_today ? (
-                <WhatsAppButton chef={chef as Chef} dish={dish as Dish} size="sm" label="Order" />
-              ) : (
-                <button disabled className="bg-gray-200 text-gray-500 px-3 py-1.5 rounded text-xs font-medium cursor-not-allowed">
-                  Not available today
-                </button>
-              )
-            )}
-          </div>
+        {/* Actions */}
+        <div className="flex items-center justify-end gap-2">
+          <Link
+            href={`/dishes/${dish.id}`}
+            onClick={e => e.stopPropagation()}
+            className="text-xs text-muted hover:text-dark transition-colors"
+          >
+            Details
+          </Link>
+          {chef && (
+            dish.available_today ? (
+              <WhatsAppButton chef={chef as Chef} dish={dish as Dish} size="sm" label="Say hello" />
+            ) : (
+              <button disabled className="bg-gray-200 text-gray-500 px-3 py-1.5 rounded text-xs font-medium cursor-not-allowed">
+                Not available today
+              </button>
+            )
+          )}
         </div>
       </div>
     </div>

@@ -22,6 +22,22 @@ async function rejectChef(formData: FormData) {
   revalidatePath('/admin')
 }
 
+async function createPost(formData: FormData) {
+  'use server'
+  const chef_id = formData.get('chef_id') as string
+  const image_url = formData.get('image_url') as string
+  const caption = formData.get('caption') as string
+
+  if (!chef_id || !image_url) return
+
+  await adminClient.from('posts').insert({
+    chef_id,
+    image_url,
+    caption: caption || null
+  })
+  revalidatePath('/admin')
+}
+
 export default async function AdminPage() {
   // Pending applications
   const { data: pending } = await adminClient
@@ -124,6 +140,35 @@ export default async function AdminPage() {
                 ))}
               </tbody>
             </table>
+          </div>
+        </section>
+
+        {/* Create Post */}
+        <section className="mt-14">
+          <h2 className="font-semibold text-lg mb-4">Create Daily Post</h2>
+          <div className="bg-white rounded-card border border-border p-6 max-w-xl">
+            <form action={createPost} className="space-y-4">
+              <div>
+                <label className="text-sm font-medium block mb-1.5">Chef *</label>
+                <select name="chef_id" required className="w-full border border-border rounded-lg px-3 py-2 text-sm focus:outline-none focus:border-saffron bg-transparent">
+                  <option value="">Select a chef</option>
+                  {approvedList.map(c => (
+                    <option key={c.id} value={c.id}>{c.name}</option>
+                  ))}
+                </select>
+              </div>
+              <div>
+                <label className="text-sm font-medium block mb-1.5">Image URL *</label>
+                <input name="image_url" required placeholder="https://..." className="w-full border border-border rounded-lg px-3 py-2 text-sm focus:outline-none focus:border-saffron bg-transparent" />
+              </div>
+              <div>
+                <label className="text-sm font-medium block mb-1.5">Caption</label>
+                <textarea name="caption" rows={2} placeholder="What's cooking..." className="w-full border border-border rounded-lg px-3 py-2 text-sm focus:outline-none focus:border-saffron bg-transparent resize-none"></textarea>
+              </div>
+              <button type="submit" className="bg-dark text-white px-5 py-2 rounded-lg text-sm font-medium hover:opacity-90">
+                Post to Feed
+              </button>
+            </form>
           </div>
         </section>
       </div>

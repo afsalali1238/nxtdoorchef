@@ -7,7 +7,20 @@ const nextConfig = {
         hostname: '*.supabase.co',
         pathname: '/storage/v1/object/public/**',
       },
+      {
+        protocol: 'https',
+        hostname: 'images.unsplash.com',
+      }
     ],
+  },
+  async redirects() {
+    return [
+      {
+        source: '/dishes',
+        destination: '/feed',
+        permanent: false,
+      },
+    ]
   },
 }
 
