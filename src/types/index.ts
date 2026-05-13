@@ -27,11 +27,13 @@ export interface Chef {
 export interface Post {
   id: string
   chef_id: string
-  image_url: string
-  caption: string | null
+  photo_url: string
+  dish_name: string
+  cultural_note: string | null
   created_at: string
+  expires_at: string
   // joined relation
-  chefs?: Pick<Chef, 'id' | 'name' | 'area' | 'whatsapp' | 'photo_url'>
+  chefs?: Pick<Chef, 'id' | 'name' | 'area' | 'whatsapp' | 'from_city' | 'from_country' | 'photo_url' | 'lat' | 'lng' | 'cuisine_type'>
 }
 
 export interface Dish {
@@ -74,8 +76,9 @@ export interface ChefFormData {
   cuisine_type: string
   specialty: string
   area: string
-  has_permit: boolean
-  accepts_custom: boolean
+  from_city: string
+  from_country: string
+  cooking_philosophy: string
   photo?: File
 }
 
@@ -83,7 +86,6 @@ export interface ChefFormData {
 export interface ChefFilters {
   cuisine: string   // 'All' or a cuisine name
   area: string      // 'All' or a Dubai area name
-  verified: boolean // only show has_permit=true
 }
 
 export interface DishFilters {

@@ -4,7 +4,7 @@
 // ADAPTED FROM cr8: same pattern — pure wa.me deep link, no backend
 // See .agents/skills/whatsapp-contact.md for full docs
 
-import { dishOrderUrl, chefMenuUrl, customOrderUrl } from '@/lib/utils'
+import { dishOrderUrl, chefMenuUrl } from '@/lib/utils'
 import type { Chef, Dish } from '@/types'
 
 const WA_ICON = (size = 14) => (
@@ -39,7 +39,7 @@ export default function WhatsAppButton({
 }: WhatsAppButtonProps) {
   if (!chef?.whatsapp) return null
 
-  const url = variant === 'custom' ? customOrderUrl(chef) : (dish ? dishOrderUrl(chef, dish) : chefMenuUrl(chef))
+  const url = dish ? dishOrderUrl(chef, dish) : chefMenuUrl(chef)
   const defaultLabel = 'Say hello'
   const s = SIZE[size]
 

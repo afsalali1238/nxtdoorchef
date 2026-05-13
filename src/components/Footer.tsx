@@ -16,7 +16,7 @@ export default function Footer() {
             A hyperlocal community directory for discovering home cultures through food.
           </p>
           <p className="text-xs text-white/30 border-l-2 border-white/10 pl-3">
-            Not a commercial food marketplace. Connections are made directly with neighbours off-platform.
+            Not a commercial food community. Connections are made directly with neighbours off-platform.
           </p>
         </div>
 
@@ -24,7 +24,7 @@ export default function Footer() {
         <div>
           <p className="text-white/70 font-medium mb-3">Explore</p>
           <div className="flex flex-col gap-2">
-            <Link href="/feed" className="hover:text-white transition-colors">Live feed</Link>
+            <Link href="/feed" className="hover:text-white transition-colors">Today's kitchen</Link>
             <Link href="/chefs"  className="hover:text-white transition-colors">Our cooks</Link>
             <Link href="/map"    className="hover:text-white transition-colors">Map view</Link>
             <Link href="/join"   className="hover:text-white transition-colors">Join community</Link>

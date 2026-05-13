@@ -78,7 +78,7 @@ export default async function ChefsPage({
 
   return (
     <SplitLayout
-      chefs={(allChefs ?? []) as Chef[]}
+      chefs={(allChefs ?? []) as unknown as Chef[]}
       panelHeader={panelHeader}
       activeChefIds={activeChefIds}
     >

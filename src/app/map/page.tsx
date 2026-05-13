@@ -18,7 +18,7 @@ export default async function MapPage() {
   const supabase = createClient()
   const { data: chefs } = await supabase
     .from('chefs')
-    .select('id, name, cuisine_type, area, lat, lng, whatsapp, specialty, photo_url, has_permit')
+    .select('id, name, cuisine_type, area, lat, lng, whatsapp, specialty, photo_url')
     .eq('is_approved', true)
     .eq('is_active', true)
     .not('lat', 'is', null)
@@ -26,7 +26,7 @@ export default async function MapPage() {
   return (
     <div className="h-[calc(100vh-62px)] mt-nav relative">
       <MapView
-        chefs={(chefs ?? []) as Chef[]}
+        chefs={(chefs ?? []) as unknown as Chef[]}
         height="100%"
       />
     </div>

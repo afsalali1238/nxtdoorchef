@@ -25,15 +25,17 @@ async function rejectChef(formData: FormData) {
 async function createPost(formData: FormData) {
   'use server'
   const chef_id = formData.get('chef_id') as string
-  const image_url = formData.get('image_url') as string
-  const caption = formData.get('caption') as string
+  const photo_url = formData.get('photo_url') as string
+  const dish_name = formData.get('dish_name') as string
+  const cultural_note = formData.get('cultural_note') as string
 
-  if (!chef_id || !image_url) return
+  if (!chef_id || !photo_url || !dish_name) return
 
   await adminClient.from('posts').insert({
     chef_id,
-    image_url,
-    caption: caption || null
+    photo_url,
+    dish_name,
+    cultural_note: cultural_note || null
   })
   revalidatePath('/admin')
 }
@@ -55,8 +57,8 @@ export default async function AdminPage() {
     .eq('is_active', true)
     .order('created_at', { ascending: false })
 
-  const pendingList = (pending ?? []) as Chef[]
-  const approvedList = (approved ?? []) as Chef[]
+  const pendingList = (pending ?? []) as unknown as Chef[]
+  const approvedList = (approved ?? []) as unknown as Chef[]
 
   return (
     <div className="pt-nav min-h-screen bg-cream">
@@ -80,9 +82,6 @@ export default async function AdminPage() {
                 <div className="flex-1 min-w-0">
                   <div className="flex items-center gap-2 flex-wrap mb-1">
                     <p className="font-medium">{chef.name}</p>
-                    {chef.has_permit && (
-                      <span className="text-xs text-verified bg-verified-bg px-1.5 py-0.5 rounded">🏛 Permit</span>
-                    )}
                   </div>
                   <p className="text-sm text-muted">{chef.cuisine_type} · {chef.area}</p>
                   <p className="text-sm text-muted">📱 {chef.whatsapp}</p>
@@ -121,7 +120,6 @@ export default async function AdminPage() {
                   <th className="text-left px-4 py-3 font-medium text-muted">Cuisine</th>
                   <th className="text-left px-4 py-3 font-medium text-muted">Area</th>
                   <th className="text-left px-4 py-3 font-medium text-muted">WhatsApp</th>
-                  <th className="text-left px-4 py-3 font-medium text-muted">Permit</th>
                 </tr>
               </thead>
               <tbody>
@@ -131,11 +129,6 @@ export default async function AdminPage() {
                     <td className="px-4 py-3 text-muted">{chef.cuisine_type}</td>
                     <td className="px-4 py-3 text-muted">{chef.area}</td>
                     <td className="px-4 py-3 text-muted">{chef.whatsapp}</td>
-                    <td className="px-4 py-3">
-                      {chef.has_permit
-                        ? <span className="text-verified text-xs font-medium">✓ Yes</span>
-                        : <span className="text-muted text-xs">—</span>}
-                    </td>
                   </tr>
                 ))}
               </tbody>
@@ -158,12 +151,16 @@ export default async function AdminPage() {
                 </select>
               </div>
               <div>
-                <label className="text-sm font-medium block mb-1.5">Image URL *</label>
-                <input name="image_url" required placeholder="https://..." className="w-full border border-border rounded-lg px-3 py-2 text-sm focus:outline-none focus:border-saffron bg-transparent" />
+                <label className="text-sm font-medium block mb-1.5">Photo URL *</label>
+                <input name="photo_url" required placeholder="https://..." className="w-full border border-border rounded-lg px-3 py-2 text-sm focus:outline-none focus:border-saffron bg-transparent" />
               </div>
               <div>
-                <label className="text-sm font-medium block mb-1.5">Caption</label>
-                <textarea name="caption" rows={2} placeholder="What's cooking..." className="w-full border border-border rounded-lg px-3 py-2 text-sm focus:outline-none focus:border-saffron bg-transparent resize-none"></textarea>
+                <label className="text-sm font-medium block mb-1.5">Dish Name *</label>
+                <input name="dish_name" required placeholder="e.g. Nasi Goreng" className="w-full border border-border rounded-lg px-3 py-2 text-sm focus:outline-none focus:border-saffron bg-transparent" />
+              </div>
+              <div>
+                <label className="text-sm font-medium block mb-1.5">Cultural Note</label>
+                <textarea name="cultural_note" rows={2} placeholder="A short story about this dish..." className="w-full border border-border rounded-lg px-3 py-2 text-sm focus:outline-none focus:border-saffron bg-transparent resize-none"></textarea>
               </div>
               <button type="submit" className="bg-dark text-white px-5 py-2 rounded-lg text-sm font-medium hover:opacity-90">
                 Post to Feed

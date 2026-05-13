@@ -136,10 +136,13 @@
 - Scaffolding files created: package.json, configs, globals.css, types, utils, constants
 - Status: Ready for first Antigravity build session
 
-### Session 1 — Pivot Implementation (Current)
-- **Priority 1 (Language & Legal Cleanup):** Completed. Removed prices, commercial framing, and has_permit/accepts_custom badges. Changed WhatsApp CTAs to "Say hello".
-- **Priority 5 (/join Page Rewrite):** Completed. Updated to community framing ("Share your culture"). Added `from_city`, `from_country`, `cooking_philosophy`. Removed commercial checkboxes.
-- **Priority 6 (Legal Pages & Cleanup):** Map bug fixed, mobile layout updated, Resend integrated in previous work.
+### Session 1 — Community Pivot (2026-05-12 → 2026-05-13)
+- **Priority 1 complete** — Global text replacements: marketplace→community, all Order→"Say hello", AED removed from components, has_permit badge removed, customOrderUrl removed, dishOrderUrl/chefMenuUrl updated.
+- **Priority 2 complete** — Daily post feature: Post type (photo_url, dish_name, cultural_note, expires_at), PostCard component, /feed page with SplitLayout, admin post creation form, /dishes→/feed redirect, chef profile "Cooking today" section.
+- **Priority 3 complete** — Homepage redesign: "What's cooking next door" hero, "Happening now" PostCards, community CTA. Chef profiles show from_city/from_country/cooking_philosophy. Past posts gallery on profiles.
+- **Priority 4 complete** — /join rewrite: "Share your culture" framing, from_city/from_country/cooking_philosophy fields, removed has_permit/accepts_custom, Resend notification via /api/join (dynamic import to avoid build crash).
+- **Build:** ✅ `npm run build` passes with zero errors.
+- **Verification:** `marketplace` → 0 results. `"Order"` → 0 results. `AED` in components → 0 results.
 
 ---
 

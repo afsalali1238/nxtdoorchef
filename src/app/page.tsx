@@ -129,7 +129,7 @@ export default async function HomePage() {
           </Link>
         </div>
         <Suspense fallback={<div className="grid grid-cols-3 gap-4"><SkeletonCard count={3} /></div>}>
-          <ChefGrid chefs={(chefs ?? []) as Chef[]} />
+          <ChefGrid chefs={(chefs ?? []) as unknown as Chef[]} />
         </Suspense>
       </section>
 

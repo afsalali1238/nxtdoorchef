@@ -1,13 +1,7 @@
 'use client'
 
 // src/components/ChefCard.tsx
-// ADAPTED FROM cr8 ArtistCard:
-//   - cuisine_type instead of category
-//   - area instead of location
-//   - specialty added (new field, no cr8 equivalent)
-//   - has_permit badge added (new, no cr8 equivalent)
-//   - instagram REMOVED
-//   - accepts_custom badge added
+// Community chef card — shows name, cuisine, area, specialty
 
 import Link from 'next/link'
 import Image from 'next/image'

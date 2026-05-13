@@ -18,7 +18,7 @@ export default function TermsPage() {
             <h2 className="text-2xl font-bold text-dark">1. Nature of the Platform</h2>
             <p>
               NextDoorChef is a community discovery platform designed to connect neighbours through food and culture in the UAE. 
-              <strong> We are not a food delivery service, marketplace, or commercial restaurant aggregator.</strong>
+              <strong> We are not a food delivery service, community directory, or commercial restaurant aggregator.</strong>
             </p>
             <p>
               The platform serves only as a directory for discovering local home cooks. Any interaction, communication, or sharing of food occurs entirely off-platform and is the sole responsibility of the individuals involved.

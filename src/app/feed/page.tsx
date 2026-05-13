@@ -41,7 +41,7 @@ export default async function FeedPage() {
 
   return (
     <SplitLayout
-      chefs={(allChefs ?? []) as Chef[]}
+      chefs={(allChefs ?? []) as unknown as Chef[]}
       panelHeader={panelHeader}
       activeChefIds={activeChefIds}
     >

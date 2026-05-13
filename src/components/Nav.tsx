@@ -8,7 +8,7 @@ import { cn } from '@/lib/utils'
 
 const NAV_LINKS = [
   { href: '/',        label: 'Home' },
-  { href: '/feed',    label: 'Live feed' },
+  { href: '/feed',    label: "Today's kitchen" },
   { href: '/chefs',   label: 'Our cooks' },
   { href: '/map',     label: 'Map' },
 ]
@@ -48,7 +48,7 @@ export default function Nav() {
           href="/join"
           className="bg-terra text-white px-5 py-2 rounded-lg text-sm font-medium hover:opacity-90 transition-opacity"
         >
-          List your kitchen
+          Share your culture
         </Link>
       </div>
     </nav>

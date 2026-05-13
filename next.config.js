@@ -20,6 +20,11 @@ const nextConfig = {
         destination: '/feed',
         permanent: false,
       },
+      {
+        source: '/dishes/:path*',
+        destination: '/feed',
+        permanent: false,
+      },
     ]
   },
 }
