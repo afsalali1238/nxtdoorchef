@@ -44,9 +44,11 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
     <html lang="en" className={`${playfair.variable} ${dmSans.variable}`}>
       <body className="font-body bg-cream text-dark">
         {/* Demo Disclaimer Banner */}
-        <div className="bg-dark/95 text-white text-xs md:text-sm py-2 px-4 text-center border-b border-white/10 z-[3000] relative">
-          <span className="opacity-80">This is a demo environment. Chef profiles and WhatsApp numbers are samples.</span>
-        </div>
+        {process.env.NEXT_PUBLIC_DEMO_MODE === 'true' && (
+          <div className="bg-dark/95 text-white text-xs md:text-sm py-2 px-4 text-center border-b border-white/10 z-[3000] relative">
+            <span className="opacity-80">This is a demo environment. Chef profiles and WhatsApp numbers are samples.</span>
+          </div>
+        )}
         <Nav />
         <main>{children}</main>
         <Footer />

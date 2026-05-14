@@ -7,7 +7,6 @@ import Link from 'next/link'
 import { createClient } from '@/lib/supabase/server'
 import ChefGrid from '@/components/ChefGrid'
 import PostCard from '@/components/PostCard'
-import CuisineFilter from '@/components/CuisineFilter'
 import SkeletonCard from '@/components/SkeletonCard'
 import type { Metadata } from 'next'
 import type { Chef, Post } from '@/types'
@@ -70,13 +69,6 @@ export default async function HomePage() {
           </Link>
         </div>
       </section>
-
-      {/* ── Cuisine strip ─────────────────────────────── */}
-      <div className="bg-white border-b border-border px-8 py-4">
-        <Suspense>
-          <CuisineFilter />
-        </Suspense>
-      </div>
 
       {/* ── How it works ──────────────────────────────── */}
       <section className="px-8 py-16">

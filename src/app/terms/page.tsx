@@ -54,6 +54,16 @@ export default function TermsPage() {
             </p>
           </section>
 
+          <section className="space-y-3">
+            <h2 className="text-2xl font-bold text-dark">5. Data & Privacy (UAE PDPL Compliance)</h2>
+            <p>
+              In accordance with the UAE Personal Data Protection Law (PDPL), we are committed to protecting your personal information. Any data collected, including phone numbers, locations, and names provided by chefs, is strictly used for the purpose of maintaining this community directory.
+            </p>
+            <p>
+              By submitting a profile, you consent to this information being publicly listed. We do not sell, trade, or otherwise transfer your personal information to outside parties. You may request the removal or modification of your data at any time by contacting the platform administrator.
+            </p>
+          </section>
+
           <div className="mt-12 pt-8 border-t border-border">
             <Link href="/" className="text-saffron font-medium hover:underline">
               ← Back to home

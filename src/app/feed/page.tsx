@@ -3,6 +3,7 @@ import { Suspense } from 'react'
 import { createClient } from '@/lib/supabase/server'
 import PostCard from '@/components/PostCard'
 import SplitLayout from '@/components/SplitLayout'
+import CuisineFilter from '@/components/CuisineFilter'
 import SkeletonCard from '@/components/SkeletonCard'
 import type { Metadata } from 'next'
 import type { Chef, Post } from '@/types'
@@ -12,14 +13,24 @@ export const metadata: Metadata = {
   description: 'See what home cooks in Dubai are making right now.',
 }
 
-export default async function FeedPage() {
+export default async function FeedPage({
+  searchParams,
+}: {
+  searchParams: { cuisine?: string }
+}) {
   const supabase = createClient()
 
   // Fetch all posts with chef details
-  const { data: posts } = await supabase
+  let query = supabase
     .from('posts')
-    .select('*, chefs(id, name, area, whatsapp, photo_url, lat, lng)')
+    .select('*, chefs!inner(id, name, cuisine_type, area, whatsapp, photo_url, lat, lng)')
     .order('created_at', { ascending: false })
+
+  if (searchParams.cuisine && searchParams.cuisine !== 'All') {
+    query = query.eq('chefs.cuisine_type', searchParams.cuisine)
+  }
+
+  const { data: posts } = await query
 
   const postList = (posts ?? []) as (Post & { chefs: Chef })[]
 
@@ -31,9 +42,12 @@ export default async function FeedPage() {
     .eq('is_active', true)
 
   const panelHeader = (
-    <div className="p-4 space-y-1">
-      <h1 className="font-display text-2xl font-bold">Today's Kitchen</h1>
-      <p className="text-sm text-muted">See what your neighbours are cooking.</p>
+    <div className="p-4 space-y-3">
+      <div>
+        <h1 className="font-display text-2xl font-bold">Today's Kitchen</h1>
+        <p className="text-sm text-muted">See what your neighbours are cooking.</p>
+      </div>
+      <Suspense><CuisineFilter selected={searchParams.cuisine ?? 'All'} /></Suspense>
     </div>
   )
 
