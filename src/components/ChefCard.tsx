@@ -32,9 +32,9 @@ export default function ChefCard({ chef, selected, onClick }: ChefCardProps) {
         }
       `}
     >
-      <div className="relative h-[130px] bg-gradient-to-br from-dark to-spice overflow-hidden">
-        <Image src={photo} alt={chef.name} fill className="object-cover opacity-60 mix-blend-overlay" />
-        <div className="absolute inset-0 bg-gradient-to-t from-dark/90 via-dark/20 to-transparent" />
+      <div className="relative h-[130px] bg-spice overflow-hidden">
+        <Image src={photo} alt={chef.name} fill className="object-cover" />
+        <div className="absolute inset-0 bg-gradient-to-t from-dark/80 via-dark/10 to-transparent" />
         
         <span className="absolute top-2.5 left-2.5 text-xl bg-black/40 backdrop-blur-sm px-1.5 py-0.5 rounded-lg">
           {flag}

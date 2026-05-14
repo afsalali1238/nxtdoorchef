@@ -64,7 +64,7 @@ export default async function HomePage() {
 
         <div className="relative z-10 px-8 pb-12 pt-48 max-w-5xl mx-auto w-full">
           <div className="flex gap-2 mb-4 text-2xl">
-            <span>🇮🇳</span><span>🇦🇪</span><span>🇵🇭</span><span>🇸🇾</span><span>🇺🇬</span><span>🇵🇰</span>
+            <span>🍛</span><span>🥘</span><span>🍜</span><span>🫓</span><span>🍲</span><span>🧆</span>
           </div>
           <h1 className="font-display text-5xl md:text-6xl font-bold text-white leading-tight max-w-2xl">
             Find the <em className="text-saffron italic">home chef</em><br />next door
@@ -133,7 +133,7 @@ export default async function HomePage() {
       </section>
 
       {/* ── Chef Spotlight ────────────────────────────── */}
-      <section className="bg-white border-t border-border px-8 py-16">
+      <section className="bg-white border-t border-border px-8 py-12">
         <div className="flex items-end justify-between mb-7">
           <div>
             <p className="section-label">Meet the community</p>
@@ -149,7 +149,7 @@ export default async function HomePage() {
       </section>
 
       {/* ── CTA Banner ────────────────────────────────── */}
-      <section className="px-8 py-20 bg-cream">
+      <section className="px-8 py-10 bg-cream">
         <div className="max-w-5xl mx-auto">
           <div
             className="rounded-[24px] px-8 py-16 md:px-16 flex flex-col md:flex-row items-center justify-between gap-10 relative overflow-hidden shadow-2xl"
