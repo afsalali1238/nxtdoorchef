@@ -107,15 +107,25 @@ export default function JoinPage() {
   }
 
   return (
-    <div className="pt-nav min-h-screen">
-      <div className="max-w-xl mx-auto px-6 py-14">
-        <p className="section-label">For home chefs</p>
-        <h1 className="font-display text-4xl font-bold mb-2">Share your culture</h1>
-        <p className="text-muted mb-10 leading-relaxed">
-          Join home cooks from across the world sharing their cuisine with Dubai. Tell us about yourself and we'll add you to the community within 24 hours.
-        </p>
+    <div className="pt-nav min-h-screen bg-cream">
+      {/* Dark Hero Header */}
+      <div className="bg-dark text-white pt-16 pb-24 px-6 relative overflow-hidden">
+        <div className="absolute inset-0">
+          <img src="https://images.unsplash.com/photo-1541518763669-27fef04b14ea?q=80&w=1200&auto=format&fit=crop" alt="Cooking background" className="w-full h-full object-cover opacity-20 saturate-150" />
+          <div className="absolute inset-0 bg-gradient-to-b from-dark/50 to-dark" />
+        </div>
+        <div className="relative z-10 max-w-xl mx-auto text-center">
+          <p className="text-saffron font-bold text-xs uppercase tracking-widest mb-3">For home chefs</p>
+          <h1 className="font-display text-4xl md:text-5xl font-bold mb-4">Share your culture</h1>
+          <p className="text-white/70 text-base leading-relaxed max-w-md mx-auto">
+            Join home cooks from across the world sharing their cuisine with Dubai. Tell us about yourself and we'll add you to the community.
+          </p>
+        </div>
+      </div>
 
-        <form onSubmit={handleSubmit} className="space-y-5">
+      <div className="max-w-xl mx-auto px-4 sm:px-6 py-8 -mt-16 relative z-20">
+        <div className="bg-white rounded-[24px] shadow-2xl p-6 md:p-10 border border-border">
+          <form onSubmit={handleSubmit} className="space-y-6">
           {/* Name */}
           <div>
             <label className="text-sm font-medium text-dark block mb-1.5">Full name *</label>
@@ -202,7 +212,8 @@ export default function JoinPage() {
             className={cn('btn-primary w-full justify-center', loading && 'opacity-60 cursor-not-allowed')}>
             {loading ? 'Submitting…' : 'Join the community →'}
           </button>
-        </form>
+          </form>
+        </div>
       </div>
     </div>
   )

@@ -4,6 +4,7 @@
 
 import { Suspense } from 'react'
 import Link from 'next/link'
+import Image from 'next/image'
 import { createClient } from '@/lib/supabase/server'
 import ChefGrid from '@/components/ChefGrid'
 import PostCard from '@/components/PostCard'
@@ -38,54 +39,76 @@ export default async function HomePage() {
   return (
     <>
       {/* ── Hero ───────────────────────────────────────── */}
-      <section className="min-h-[520px] pt-nav flex flex-col items-center justify-center text-center px-6 pb-14 relative overflow-hidden"
-        style={{
-          background: 'linear-gradient(160deg, #160c04 0%, #2d1a0a 42%, #4a2c12 100%)',
-        }}
-      >
-        {/* Glow accents */}
+      <section className="relative min-h-[500px] md:min-h-[600px] flex flex-col justify-end overflow-hidden bg-dark">
+        {/* 4-col image mosaic */}
+        <div className="absolute top-0 left-0 right-0 h-[300px] md:h-[400px] grid grid-cols-4 gap-1 opacity-70 saturate-125">
+          {[
+            'https://images.unsplash.com/photo-1585937421612-70a008356fbe?q=80&w=400&auto=format&fit=crop',
+            'https://images.unsplash.com/photo-1563379091339-03b21ab4a4f8?q=80&w=400&auto=format&fit=crop',
+            'https://images.unsplash.com/photo-1628294895950-9805252327bc?q=80&w=400&auto=format&fit=crop',
+            'https://images.unsplash.com/photo-1541518763669-27fef04b14ea?q=80&w=400&auto=format&fit=crop'
+          ].map((src, i) => (
+            <div key={i} className="relative h-full w-full">
+              <Image src={src} alt="Home cooked food" fill className="object-cover" priority />
+            </div>
+          ))}
+        </div>
+        
+        {/* Warm dark overlay */}
+        <div className="absolute inset-0 bg-gradient-to-b from-transparent via-dark/80 to-dark" />
+        
+        {/* Background pattern glow */}
         <div className="absolute inset-0 pointer-events-none">
-          <div className="absolute top-0 right-0 w-[500px] h-[500px] rounded-full opacity-20"
-            style={{ background: 'radial-gradient(circle, #E8960A 0%, transparent 65%)', transform: 'translate(30%,-30%)' }} />
-          <div className="absolute bottom-0 left-0 w-[300px] h-[300px] rounded-full opacity-10"
-            style={{ background: 'radial-gradient(circle, #C4522A 0%, transparent 65%)', transform: 'translate(-30%,30%)' }} />
+          <div className="absolute top-[20%] left-[20%] w-[300px] h-[300px] rounded-full opacity-[0.15]" style={{ background: 'radial-gradient(circle, #D4780A 0%, transparent 60%)' }} />
         </div>
 
-        <p className="section-label relative z-10">Dubai's home chef community</p>
-        <h1 className="font-display text-5xl md:text-6xl font-bold text-white leading-tight max-w-2xl relative z-10 mt-2">
-          Find the <em className="text-saffron not-italic">home chef</em><br />next door
-        </h1>
-        <p className="text-white/60 text-lg mt-5 mb-8 max-w-md font-light leading-relaxed relative z-10">
-          Find a South Indian tiffin in Karama, a Filipino home cook in Deira, or a Ugandan feast in Bur Dubai.
-        </p>
+        <div className="relative z-10 px-8 pb-12 pt-48 max-w-5xl mx-auto w-full">
+          <div className="flex gap-2 mb-4 text-2xl">
+            <span>🇮🇳</span><span>🇦🇪</span><span>🇵🇭</span><span>🇸🇾</span><span>🇺🇬</span><span>🇵🇰</span>
+          </div>
+          <h1 className="font-display text-5xl md:text-6xl font-bold text-white leading-tight max-w-2xl">
+            Find the <em className="text-saffron italic">home chef</em><br />next door
+          </h1>
+          <p className="text-white/80 text-base md:text-lg mt-4 mb-8 max-w-lg font-light leading-relaxed">
+            Real kitchens. Real stories. From Karama to Dubai Marina — your neighbour is cooking something incredible right now.
+          </p>
 
-        {/* Browse Button */}
-        <div className="relative z-10">
-          <Link
-            href="/feed"
-            className="inline-flex items-center justify-center bg-saffron px-8 py-4 text-base font-medium text-dark rounded-full hover:bg-[#d4880a] hover:-translate-y-0.5 transition-all shadow-lg"
-          >
-            Today's kitchen →
-          </Link>
+          <div className="flex flex-wrap gap-4">
+            <Link
+              href="/feed"
+              className="inline-flex items-center justify-center bg-saffron px-6 py-3 md:px-8 md:py-4 text-sm md:text-base font-medium text-white rounded-lg hover:bg-[#b86505] hover:-translate-y-0.5 transition-all shadow-lg"
+            >
+              🍳 Today's kitchen
+            </Link>
+            <Link
+              href="/map"
+              className="inline-flex items-center justify-center bg-white/10 border border-white/20 px-6 py-3 md:px-8 md:py-4 text-sm md:text-base font-medium text-white rounded-lg hover:bg-white/20 transition-all"
+            >
+              📍 View map
+            </Link>
+          </div>
         </div>
       </section>
 
       {/* ── How it works ──────────────────────────────── */}
-      <section className="px-8 py-16">
-        <p className="section-label">Simple process</p>
-        <h2 className="font-display text-3xl font-bold mb-10">Home cooking, made easy</h2>
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-5">
-          {[
-            { n: '01', title: 'Browse the map', body: 'Discover home chefs near you. Filter by cuisine, dietary need, or area of Dubai.' },
-            { n: '02', title: 'Message the chef', body: 'Tap "Say hello" to connect directly. Learn about their culture and cooking.' },
-            { n: '03', title: 'Connect locally', body: 'Meet your neighbours and discover the diverse cultures cooking next door.' },
-          ].map(s => (
-            <div key={s.n} className="bg-white rounded-card border border-border p-7">
-              <p className="font-display text-5xl font-bold text-saffron leading-none">{s.n}</p>
-              <h3 className="font-medium text-lg mt-4 mb-2">{s.title}</h3>
-              <p className="text-muted text-sm leading-relaxed">{s.body}</p>
-            </div>
-          ))}
+      <section className="px-8 py-20 bg-cream">
+        <div className="max-w-5xl mx-auto">
+          <p className="section-label">Simple process</p>
+          <h2 className="font-display text-4xl font-bold mb-12">Home cooking, made easy</h2>
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+            {[
+              { n: '01', title: 'Browse the map', body: 'Discover home chefs near you. Filter by cuisine or area of Dubai.' },
+              { n: '02', title: 'Say hello', body: 'Tap "Say hello" to connect on WhatsApp. Learn their story and today\'s menu.' },
+              { n: '03', title: 'Eat like a neighbour', body: 'Discover the diverse cultures cooking next door — no restaurant needed.' },
+            ].map(s => (
+              <div key={s.n} className="bg-gradient-to-br from-spice to-dark rounded-2xl p-8 relative overflow-hidden text-white shadow-xl">
+                <div className="absolute -top-6 -right-6 w-24 h-24 bg-saffron/15 rounded-full blur-xl pointer-events-none"></div>
+                <p className="font-display text-6xl font-black text-saffron/20 leading-none mb-6">{s.n}</p>
+                <h3 className="font-bold text-lg mb-3">{s.title}</h3>
+                <p className="text-white/70 text-sm leading-relaxed">{s.body}</p>
+              </div>
+            ))}
+          </div>
         </div>
       </section>
 
@@ -126,28 +149,27 @@ export default async function HomePage() {
       </section>
 
       {/* ── CTA Banner ────────────────────────────────── */}
-      <section className="px-8 py-16">
-        <div
-          className="rounded-[18px] px-12 py-14 flex flex-col md:flex-row items-center justify-between gap-10 relative overflow-hidden"
-          style={{ background: 'linear-gradient(140deg, #1e0f04 0%, #3d2010 50%, #5a3018 100%)' }}
-        >
-          <div className="absolute right-48 bottom-0 text-[90px] opacity-[0.06] pointer-events-none select-none">🍳</div>
-          <div className="relative z-10">
-            <p className="section-label">For home chefs</p>
-            <h2 className="font-display text-3xl font-bold text-white mt-1 leading-snug">
-              Cook something today.<br />Share it with your neighbours.
-            </h2>
-            <p className="text-white/55 mt-3 text-sm max-w-sm leading-relaxed">
-              Join home cooks across Dubai celebrating their cuisine — no selling required. Just sharing.
-            </p>
-          </div>
-          <div className="flex gap-3 flex-shrink-0 relative z-10">
-            <Link href="/join" className="bg-saffron text-dark px-6 py-3 rounded-lg text-sm font-medium hover:opacity-90 transition-opacity">
-              Share your culture
-            </Link>
-            <button className="border border-white/30 text-white px-6 py-3 rounded-lg text-sm hover:border-white transition-colors">
-              Learn more
-            </button>
+      <section className="px-8 py-20 bg-cream">
+        <div className="max-w-5xl mx-auto">
+          <div
+            className="rounded-[24px] px-8 py-16 md:px-16 flex flex-col md:flex-row items-center justify-between gap-10 relative overflow-hidden shadow-2xl"
+            style={{ background: 'linear-gradient(140deg, #1A0A00 0%, #4A1E00 100%)' }}
+          >
+            <div className="absolute right-[-10%] bottom-[-20%] text-[150px] opacity-10 pointer-events-none select-none blur-sm transform rotate-12">🍳</div>
+            <div className="relative z-10 md:max-w-md">
+              <p className="text-saffron font-bold text-xs uppercase tracking-widest mb-3">For home chefs</p>
+              <h2 className="font-display text-4xl font-bold text-white leading-tight mb-4">
+                Cook something today.<br />Share it with your neighbours.
+              </h2>
+              <p className="text-white/70 text-sm leading-relaxed">
+                Join home cooks across Dubai celebrating their cuisine — no selling required. Just sharing.
+              </p>
+            </div>
+            <div className="flex gap-4 flex-shrink-0 relative z-10 w-full md:w-auto flex-col sm:flex-row">
+              <Link href="/join" className="bg-saffron text-white px-8 py-4 rounded-lg text-sm font-bold hover:bg-[#b86505] transition-colors text-center shadow-lg">
+                Share your culture
+              </Link>
+            </div>
           </div>
         </div>
       </section>
