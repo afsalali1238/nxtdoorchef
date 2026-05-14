@@ -9,7 +9,6 @@
 
 import { useEffect } from 'react'
 import { MapContainer, TileLayer, Marker, Popup, useMap } from 'react-leaflet'
-import MarkerClusterGroup from 'react-leaflet-cluster'
 import L from 'leaflet'
 import WhatsAppButton from './WhatsAppButton'
 import { DUBAI_MAP_CENTER, DUBAI_MAP_ZOOM, CHEF_PIN_EMOJI } from '@/lib/constants'
@@ -67,20 +66,18 @@ export default function MapView({
         attribution='&copy; <a href="https://openstreetmap.org">OpenStreetMap</a> contributors'
       />
 
-      <MarkerClusterGroup chunkedLoading>
-        {validChefs.map(chef => (
-          <Marker
-            key={chef.id}
-            position={[chef.lat!, chef.lng!]}
-            icon={chefPin(chef.id === selectedChefId, activeChefIds.includes(chef.id))}
-            eventHandlers={{ click: () => onChefSelect?.(chef.id) }}
-          >
-            <Popup maxWidth={240}>
-              <ChefPopup chef={chef} />
-            </Popup>
-          </Marker>
-        ))}
-      </MarkerClusterGroup>
+      {validChefs.map(chef => (
+        <Marker
+          key={chef.id}
+          position={[chef.lat!, chef.lng!]}
+          icon={chefPin(chef.id === selectedChefId, activeChefIds.includes(chef.id))}
+          eventHandlers={{ click: () => onChefSelect?.(chef.id) }}
+        >
+          <Popup maxWidth={240}>
+            <ChefPopup chef={chef} />
+          </Popup>
+        </Marker>
+      ))}
 
       {/* Fly to selected chef pin */}
       <FlyToChef chef={validChefs.find(c => c.id === selectedChefId)} />

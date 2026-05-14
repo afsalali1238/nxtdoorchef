@@ -17,7 +17,7 @@ export default function Nav() {
   const pathname = usePathname()
 
   return (
-    <nav className="fixed top-0 left-0 right-0 z-[2000] h-nav bg-white border-b border-border flex items-center px-8 gap-0">
+    <nav className="sticky top-0 left-0 right-0 z-[2000] h-nav bg-white border-b border-border flex items-center px-8 gap-0">
       {/* Logo */}
       <Link href="/" className="font-display text-xl font-bold mr-8 tracking-tight">
         NextDoor<span className="text-saffron">Chef</span>

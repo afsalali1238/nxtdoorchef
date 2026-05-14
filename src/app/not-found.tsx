@@ -1,14 +1,26 @@
-// src/app/not-found.tsx
 import Link from 'next/link'
 
 export default function NotFound() {
   return (
-    <div className="pt-nav min-h-screen flex items-center justify-center px-6">
-      <div className="text-center">
-        <p className="text-6xl mb-5">🍽️</p>
-        <h1 className="font-display text-4xl font-bold mb-3">Page not found</h1>
-        <p className="text-muted mb-8">This chef or dish doesn't exist.</p>
-        <Link href="/" className="btn-primary">Back to home</Link>
+    <div className="min-h-[calc(100vh-62px)] flex flex-col items-center justify-center p-8 text-center bg-cream">
+      <div className="text-6xl mb-6">🍽️</div>
+      <h2 className="font-display text-4xl font-bold mb-4">Plate Not Found</h2>
+      <p className="text-muted max-w-md mx-auto mb-8 leading-relaxed">
+        We couldn't find the page you're looking for. It might have been moved or the chef might have taken it off the menu.
+      </p>
+      <div className="flex gap-4 flex-wrap justify-center">
+        <Link 
+          href="/" 
+          className="bg-dark text-white px-6 py-3 rounded-lg font-medium hover:bg-dark/90 transition-colors"
+        >
+          Return Home
+        </Link>
+        <Link 
+          href="/feed" 
+          className="bg-cream-dark text-dark px-6 py-3 rounded-lg font-medium hover:bg-black/5 transition-colors"
+        >
+          See Today's Kitchen
+        </Link>
       </div>
     </div>
   )

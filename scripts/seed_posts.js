@@ -21,6 +21,10 @@ async function seedPosts() {
     return;
   }
 
+  // Clear existing posts to prevent duplicates
+  console.log("Cleaning up existing posts...");
+  await supabase.from('posts').delete().neq('id', '00000000-0000-0000-0000-000000000000');
+
   console.log(`Found ${chefs.length} approved chefs:`, chefs.map(c => c.name).join(', '));
 
   const posts = [

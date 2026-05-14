@@ -42,39 +42,49 @@ export default async function ChefProfilePage({ params }: Props) {
 
   const c = chef as Chef & { posts: Post[] }
   const sortedPosts = [...(c.posts || [])].sort((a, b) => new Date(b.created_at).getTime() - new Date(a.created_at).getTime())
-  const todaysPost = sortedPosts.length > 0 && new Date(sortedPosts[0].created_at).toDateString() === new Date().toDateString() ? sortedPosts[0] : null
-  const pastPosts = todaysPost ? sortedPosts.slice(1) : sortedPosts
+  const activePost = sortedPosts.length > 0 && new Date(sortedPosts[0].expires_at).getTime() > Date.now() ? sortedPosts[0] : null
+  const pastPosts = activePost ? sortedPosts.slice(1) : sortedPosts
 
   return (
     <div className="pt-nav min-h-screen">
       {/* Hero */}
-      <div className="bg-dark text-white px-8 py-14">
-        <div className="max-w-4xl mx-auto flex items-start gap-8">
-          <div className="w-24 h-24 rounded-full bg-amber-bg flex-shrink-0 overflow-hidden flex items-center justify-center text-4xl">
+      <div className="bg-dark text-white relative overflow-hidden">
+        {/* Decorative background pattern */}
+        <div className="absolute inset-0 opacity-5" style={{ backgroundImage: 'radial-gradient(#C4522A 1px, transparent 1px)', backgroundSize: '24px 24px' }}></div>
+        <div className="absolute top-0 left-0 right-0 h-32 bg-gradient-to-b from-black/40 to-transparent"></div>
+        
+        <div className="max-w-4xl mx-auto px-8 pt-20 pb-14 flex flex-col sm:flex-row items-center sm:items-start text-center sm:text-left gap-8 relative z-10">
+          <div className="w-32 h-32 rounded-full bg-amber-bg flex-shrink-0 overflow-hidden flex items-center justify-center text-6xl border-4 border-dark shadow-xl">
             {c.photo_url
-              ? <Image src={c.photo_url} alt={c.name} width={96} height={96} className="object-cover w-full h-full" />
+              ? <Image src={c.photo_url} alt={c.name} width={128} height={128} className="object-cover w-full h-full" />
               : '👩‍🍳'}
           </div>
-          <div className="flex-1">
-            <div className="flex items-center gap-2 flex-wrap mb-1">
-              <h1 className="font-display text-3xl font-bold">{c.name}</h1>
+          <div className="flex-1 flex flex-col items-center sm:items-start">
+            <div className="flex items-center gap-2 flex-wrap mb-1 justify-center sm:justify-start">
+              <h1 className="font-display text-4xl font-bold">{c.name}</h1>
             </div>
             
-            <div className="flex items-center gap-3 text-white/60 mb-3 text-sm">
-              <span>{c.cuisine_type}</span>
+            <div className="flex items-center gap-3 text-white/60 mb-4 text-sm justify-center sm:justify-start">
+              <span className="font-medium text-saffron">{c.cuisine_type}</span>
               <span>·</span>
               <span>📍 {c.area}, Dubai</span>
               {c.from_city && c.from_country && (
                 <>
-                  <span>·</span>
-                  <span>From {c.from_city}, {c.from_country}</span>
+                  <span className="hidden sm:inline">·</span>
+                  <span className="hidden sm:inline">From {c.from_city}, {c.from_country}</span>
                 </>
               )}
             </div>
             
+            {c.from_city && c.from_country && (
+              <div className="sm:hidden text-white/60 text-sm mb-4">
+                From {c.from_city}, {c.from_country}
+              </div>
+            )}
+            
             <div className="mb-4 inline-flex items-center gap-2">
-              <span className={`w-2 h-2 rounded-full ${todaysPost ? 'bg-green-500 shadow-[0_0_8px_rgba(34,197,94,0.6)]' : 'bg-white/20'}`}></span>
-              <span className="text-sm font-medium">{todaysPost ? 'Cooking today' : 'Not cooking today'}</span>
+              <span className={`w-2 h-2 rounded-full ${activePost ? 'bg-green-500 shadow-[0_0_8px_rgba(34,197,94,0.6)]' : 'bg-white/20'}`}></span>
+              <span className="text-sm font-medium">{activePost ? 'Cooking right now' : 'Not cooking today'}</span>
             </div>
 
             {c.cooking_philosophy && (
@@ -98,12 +108,12 @@ export default async function ChefProfilePage({ params }: Props) {
 
       {/* Feed */}
       <div className="max-w-4xl mx-auto px-8 py-12">
-        {todaysPost && (
+        {activePost && (
           <section className="mb-12">
-            <p className="section-label">Cooking today</p>
-            <h2 className="font-display text-2xl font-bold mb-6">What {c.name} is cooking today</h2>
+            <p className="section-label">Cooking right now</p>
+            <h2 className="font-display text-2xl font-bold mb-6">What {c.name} is cooking right now</h2>
             <div className="max-w-md">
-              <PostCard post={{ ...todaysPost, chefs: c }} />
+              <PostCard post={{ ...activePost, chefs: c }} />
             </div>
           </section>
         )}
