@@ -23,9 +23,25 @@ export default async function HomePage() {
   // Feed preview (latest 4 posts)
   const { data: posts } = await supabase
     .from('posts')
-    .select('*, chefs(id, name, area, whatsapp, photo_url, specialty)')
+    .select('*, chefs(id, name, area, whatsapp, photo_url, specialty, bio, emirate)')
     .order('created_at', { ascending: false })
     .limit(4)
+
+  const latestPost = posts?.[0] as (Post & { chefs: Chef }) | undefined
+
+  // Stats
+  const { count: chefCount } = await supabase
+    .from('chefs')
+    .select('*', { count: 'exact', head: true })
+    .eq('is_approved', true)
+    .eq('is_active', true)
+
+  const { data: cuisines } = await supabase
+    .from('chefs')
+    .select('cuisine_type')
+    .eq('is_approved', true)
+
+  const cuisineCount = new Set(cuisines?.map(c => c.cuisine_type)).size
 
   // Chefs spotlight (approved, 3 max)
   const { data: chefs } = await supabase
@@ -64,13 +80,13 @@ export default async function HomePage() {
 
         <div className="relative z-10 px-8 pb-12 pt-48 max-w-5xl mx-auto w-full">
           <div className="flex gap-2 mb-4 text-2xl">
-            <span>🍛</span><span>🥘</span><span>🍜</span><span>🫓</span><span>🍲</span><span>🧆</span>
+            <span className="text-saffron font-bold text-xs uppercase tracking-widest bg-dark/40 px-2 py-1 rounded backdrop-blur-sm border border-white/10">Hyper-local · Dubai</span>
           </div>
           <h1 className="font-display text-5xl md:text-6xl font-bold text-white leading-tight max-w-2xl">
-            Find the <em className="text-saffron italic">home chef</em><br />next door
+            The <em className="text-saffron italic">best meal in town</em><br />is next door.
           </h1>
           <p className="text-white/80 text-base md:text-lg mt-4 mb-8 max-w-lg font-light leading-relaxed">
-            Real kitchens. Real stories. From Karama to Dubai Marina — your neighbour is cooking something incredible right now.
+            Real kitchens, real stories. From Karama to Dubai Marina, connect with home cooks making exactly what they feed their own families.
           </p>
 
           <div className="flex flex-wrap gap-4">
@@ -87,7 +103,25 @@ export default async function HomePage() {
               📍 View map
             </Link>
           </div>
+          <p className="text-sm text-white/60 mt-3">
+            🍛 {chefCount} kitchens cooking · {cuisineCount} cuisines tonight
+          </p>
         </div>
+
+        {latestPost && latestPost.chefs && (
+          <div className="absolute bottom-6 right-6 hidden md:block bg-white rounded-2xl shadow-xl p-4 max-w-xs z-20">
+            <div className="flex items-center gap-3 mb-2">
+              <Image src={latestPost.chefs.photo_url || '/images/chef-placeholder.jpg'} width={36} height={36} className="rounded-full object-cover" alt={latestPost.chefs.name} />
+              <div>
+                <p className="font-semibold text-sm text-ink-900">{latestPost.chefs.name}</p>
+                <p className="text-xs text-ink-400">{latestPost.chefs.area} · {latestPost.chefs.from_city || 'Dubai'}</p>
+              </div>
+            </div>
+            {latestPost.chefs.bio && (
+              <p className="text-xs italic text-ink-600 line-clamp-2">"{latestPost.chefs.bio}"</p>
+            )}
+          </div>
+        )}
       </section>
 
       {/* ── How it works ──────────────────────────────── */}
@@ -98,8 +132,8 @@ export default async function HomePage() {
           <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
             {[
               { n: '01', title: 'Browse the map', body: 'Discover home chefs near you. Filter by cuisine or area of Dubai.' },
-              { n: '02', title: 'Say hello', body: 'Tap "Say hello" to connect on WhatsApp. Learn their story and today\'s menu.' },
-              { n: '03', title: 'Eat like a neighbour', body: 'Discover the diverse cultures cooking next door — no restaurant needed.' },
+              { n: '02', title: 'Say hello', body: 'Tap "Say hello" to connect on WhatsApp. Hear their story, see today\'s menu, agree on pickup.' },
+              { n: '03', title: 'Eat like a neighbour', body: 'Walk over, bring a tiffin, taste the cultures cooking right next door.' },
             ].map(s => (
               <div key={s.n} className="bg-gradient-to-br from-spice to-dark rounded-2xl p-8 relative overflow-hidden text-white shadow-xl">
                 <div className="absolute -top-6 -right-6 w-24 h-24 bg-saffron/15 rounded-full blur-xl pointer-events-none"></div>
@@ -159,15 +193,18 @@ export default async function HomePage() {
             <div className="relative z-10 md:max-w-md">
               <p className="text-saffron font-bold text-xs uppercase tracking-widest mb-3">For home chefs</p>
               <h2 className="font-display text-4xl font-bold text-white leading-tight mb-4">
-                Cook something today.<br />Share it with your neighbours.
+                Cook for your neighbours.
               </h2>
               <p className="text-white/70 text-sm leading-relaxed">
-                Join home cooks across Dubai celebrating their cuisine — no selling required. Just sharing.
+                Turn the food you already love making into a small business. We handle discovery, you focus on the seasoning.
               </p>
             </div>
             <div className="flex gap-4 flex-shrink-0 relative z-10 w-full md:w-auto flex-col sm:flex-row">
               <Link href="/join" className="bg-saffron text-white px-8 py-4 rounded-lg text-sm font-bold hover:bg-[#b86505] transition-colors text-center shadow-lg">
-                Share your culture
+                Become a home chef
+              </Link>
+              <Link href="/chefs" className="bg-white/10 border border-white/20 text-white px-8 py-4 rounded-lg text-sm font-bold hover:bg-white/20 transition-colors text-center">
+                Meet the cooks
               </Link>
             </div>
           </div>
