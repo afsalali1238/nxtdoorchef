@@ -7,7 +7,6 @@ import { usePathname } from 'next/navigation'
 import { cn } from '@/lib/utils'
 
 const NAV_LINKS = [
-  { href: '/',        label: 'Home' },
   { href: '/feed',    label: "Today's kitchen" },
   { href: '/chefs',   label: 'Our cooks' },
   { href: '/map',     label: 'Map' },
@@ -20,7 +19,7 @@ export default function Nav() {
     <nav className="sticky top-0 left-0 right-0 z-[2000] h-nav bg-white border-b border-border flex items-center px-8 gap-0">
       {/* Logo */}
       <Link href="/" className="font-display text-xl font-bold mr-8 tracking-tight">
-        NextDoor<span className="text-saffron">Chef</span>
+        <span className="text-ink-900">NxtDoor</span><span className="text-saffron">Chef</span>
       </Link>
 
       {/* Links */}
