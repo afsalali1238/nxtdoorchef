@@ -131,15 +131,18 @@ export default async function HomePage() {
           <h2 className="font-display text-4xl font-bold mb-12">Home cooking, made easy</h2>
           <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
             {[
-              { n: '01', title: 'Browse the map', body: 'Discover home chefs near you. Filter by cuisine or area of Dubai.' },
-              { n: '02', title: 'Say hello', body: 'Tap "Say hello" to connect on WhatsApp. Hear their story, see today\'s menu, agree on pickup.' },
-              { n: '03', title: 'Eat like a neighbour', body: 'Walk over, bring a tiffin, taste the cultures cooking right next door.' },
+              { n: '01', title: 'Browse the map', body: 'Discover home chefs near you. Filter by cuisine or area of Dubai.', image: '/images/step_1_map.png' },
+              { n: '02', title: 'Say hello', body: 'Tap "Say hello" to connect on WhatsApp. Hear their story, see today\'s menu, agree on pickup.', image: '/images/step_2_chat.png' },
+              { n: '03', title: 'Eat like a neighbour', body: 'Walk over, bring a tiffin, taste the cultures cooking right next door.', image: '/images/step_3_tiffin.png' },
             ].map(s => (
-              <div key={s.n} className="bg-gradient-to-br from-spice to-dark rounded-2xl p-8 relative overflow-hidden text-white shadow-xl">
-                <div className="absolute -top-6 -right-6 w-24 h-24 bg-saffron/15 rounded-full blur-xl pointer-events-none"></div>
-                <p className="font-display text-6xl font-black text-saffron/20 leading-none mb-6">{s.n}</p>
-                <h3 className="font-bold text-lg mb-3">{s.title}</h3>
-                <p className="text-white/70 text-sm leading-relaxed">{s.body}</p>
+              <div key={s.n} className="rounded-2xl p-8 relative overflow-hidden text-white shadow-xl group min-h-[320px] flex flex-col justify-end">
+                <Image src={s.image} alt={s.title} fill className="object-cover transition-transform duration-700 group-hover:scale-105" />
+                <div className="absolute inset-0 bg-gradient-to-t from-black/95 via-black/60 to-black/30" />
+                <div className="relative z-10">
+                  <p className="font-display text-6xl font-black text-saffron/80 leading-none mb-4">{s.n}</p>
+                  <h3 className="font-bold text-xl mb-2">{s.title}</h3>
+                  <p className="text-white/80 text-sm leading-relaxed">{s.body}</p>
+                </div>
               </div>
             ))}
           </div>
