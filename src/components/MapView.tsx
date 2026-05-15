@@ -98,18 +98,51 @@ function FlyToChef({ chef }: { chef?: Chef }) {
 
 // Popup content shown when a pin is clicked
 function ChefPopup({ chef }: { chef: Chef }) {
+  const latestPost = chef.posts?.[0]
+  const flag = chef.cuisine_flag || '🌍'
+
   return (
-    <div style={{ fontFamily: 'var(--font-body, DM Sans, sans-serif)' }}>
-      <p style={{ fontWeight: 600, fontSize: 14, marginBottom: 2 }}>{chef.name}</p>
-      <p style={{ fontSize: 12, color: '#8C7860', marginBottom: 4 }}>
-        {chef.cuisine_type} · {chef.area}
-      </p>
-      {chef.specialty && (
-        <p style={{ fontSize: 12, marginBottom: 10, lineHeight: 1.5 }}>
-          {chef.specialty}
-        </p>
-      )}
-      <WhatsAppButton chef={chef} size="sm" />
+    <div style={{ fontFamily: 'var(--font-body, DM Sans, sans-serif)', minWidth: '220px' }}>
+      <div style={{ display: 'flex', alignItems: 'center', gap: '8px', marginBottom: '12px' }}>
+        {chef.photo_url ? (
+          <img src={chef.photo_url} alt={chef.name} style={{ width: '40px', height: '40px', borderRadius: '50%', objectFit: 'cover' }} />
+        ) : (
+          <div style={{ width: '40px', height: '40px', borderRadius: '50%', background: '#FFFBF5', display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: '18px' }}>👩‍🍳</div>
+        )}
+        <div>
+          <p style={{ fontWeight: 700, fontSize: '15px', margin: 0, color: '#1A1207' }}>{chef.name}</p>
+          <p style={{ fontSize: '11px', color: '#7A6550', margin: '2px 0 0 0' }}>
+            {flag} {chef.cuisine_type} · {chef.area}
+          </p>
+        </div>
+      </div>
+
+      {latestPost ? (
+        <div style={{ marginBottom: '12px', background: '#F5F0E8', borderRadius: '8px', overflow: 'hidden' }}>
+          {latestPost.photo_url && (
+            <div style={{ position: 'relative', width: '100%', height: '100px' }}>
+              <img src={latestPost.photo_url} alt={latestPost.dish_name} style={{ width: '100%', height: '100%', objectFit: 'cover' }} />
+              <div style={{ position: 'absolute', bottom: '6px', left: '6px', background: 'rgba(255,255,255,0.9)', padding: '2px 6px', borderRadius: '4px', fontSize: '10px', fontWeight: 600 }}>Today's Dish</div>
+            </div>
+          )}
+          <div style={{ padding: '8px' }}>
+            <p style={{ fontWeight: 600, fontSize: '13px', margin: '0 0 4px 0', color: '#1A1207' }}>{latestPost.dish_name}</p>
+            {((latestPost as any).quote || latestPost.cultural_note) && (
+              <p style={{ fontSize: '11px', fontStyle: 'italic', color: '#3D2C1A', margin: 0, display: '-webkit-box', WebkitLineClamp: 2, WebkitBoxOrient: 'vertical', overflow: 'hidden' }}>
+                "{((latestPost as any).quote || latestPost.cultural_note)}"
+              </p>
+            )}
+          </div>
+        </div>
+      ) : chef.specialty ? (
+        <div style={{ marginBottom: '12px' }}>
+          <p style={{ fontSize: '12px', margin: 0, lineHeight: 1.5, color: '#7A6550' }}>{chef.specialty}</p>
+        </div>
+      ) : null}
+
+      <div style={{ width: '100%' }}>
+        <WhatsAppButton chef={chef} size="sm" />
+      </div>
     </div>
   )
 }

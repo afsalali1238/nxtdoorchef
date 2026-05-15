@@ -17,7 +17,9 @@ export interface Chef {
   is_active: boolean
   from_city: string | null
   from_country: string | null
+  emirate?: string | null
   cooking_philosophy: string | null
+  cuisine_flag?: string | null
   created_at: string
   // joined relations
   dishes?: Dish[]
@@ -30,10 +32,12 @@ export interface Post {
   photo_url: string
   dish_name: string
   cultural_note: string | null
+  quote?: string | null
+  cuisine_flag?: string | null
   created_at: string
   expires_at: string
   // joined relation
-  chefs?: Pick<Chef, 'id' | 'name' | 'area' | 'whatsapp' | 'from_city' | 'from_country' | 'photo_url' | 'lat' | 'lng' | 'cuisine_type'>
+  chefs?: Pick<Chef, 'id' | 'name' | 'area' | 'whatsapp' | 'from_city' | 'from_country' | 'photo_url' | 'lat' | 'lng' | 'cuisine_type' | 'bio' | 'specialty'> & { cuisine_flag?: string | null }
 }
 
 export interface Dish {
