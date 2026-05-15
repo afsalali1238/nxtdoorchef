@@ -23,22 +23,26 @@ export default function CuisineFilter({ selected = 'All', paramKey = 'cuisine' }
   }
 
   return (
-    <div className="flex gap-2 overflow-x-auto pb-1 hide-scrollbar">
-      {CUISINES.map(c => (
-        <button
-          key={c.slug}
-          onClick={() => handleSelect(c.name)}
-          className={cn(
-            'flex items-center gap-1.5 px-3 py-1.5 rounded-chip border text-sm whitespace-nowrap transition-all flex-shrink-0',
-            (selected === c.name || (selected === 'All' && c.name === 'All'))
-              ? 'bg-amber-bg border-saffron font-medium text-dark'
-              : 'bg-white border-border text-muted hover:border-saffron hover:text-dark'
-          )}
-        >
-          <span>{c.emoji}</span>
-          {c.name}
-        </button>
-      ))}
+    <div className="flex gap-2 overflow-x-auto pb-2 hide-scrollbar">
+      {CUISINES.map(c => {
+        const isAll = c.name === 'All'
+        const emoji = isAll ? '🌍' : c.emoji
+        return (
+          <button
+            key={c.slug}
+            onClick={() => handleSelect(c.name)}
+            className={cn(
+              'flex items-center gap-1.5 px-3 py-1.5 rounded-full border text-sm whitespace-nowrap transition-all flex-shrink-0 shadow-sm',
+              (selected === c.name || (selected === 'All' && isAll))
+                ? 'bg-saffron border-saffron text-white font-medium shadow-md'
+                : 'bg-white border-[#E8DFD0] text-[#7A6550] hover:border-saffron/50 hover:text-[#1A1207]'
+            )}
+          >
+            <span>{emoji}</span>
+            {c.name}
+          </button>
+        )
+      })}
     </div>
   )
 }

@@ -44,8 +44,9 @@ export default async function FeedPage({
   const panelHeader = (
     <div className="p-4 space-y-3">
       <div>
-        <h1 className="font-display text-2xl font-bold">Today's Kitchen</h1>
-        <p className="text-sm text-muted">See what your neighbours are cooking.</p>
+        <p className="text-saffron font-bold text-[11px] uppercase tracking-widest mb-1">Happening now</p>
+        <h1 className="font-display text-2xl font-bold mb-1 text-[#1A1207]">Today's kitchen</h1>
+        <p className="text-sm text-[#3D2C1A]">See what your neighbours are cooking right now. Tap to say hello on WhatsApp.</p>
       </div>
       <Suspense><CuisineFilter selected={searchParams.cuisine ?? 'All'} /></Suspense>
     </div>

@@ -15,66 +15,67 @@ interface PostCardProps {
 export default function PostCard({ post, selected, onClick }: PostCardProps) {
   const chef = post.chefs as Pick<Chef, 'id' | 'name' | 'area' | 'whatsapp' | 'from_city' | 'from_country' | 'photo_url' | 'lat' | 'lng' | 'cuisine_type'> | undefined
 
+  const flag = ((chef as any)?.cuisine_flag as string) || '🌍';
+  const cuisine = chef?.cuisine_type || 'Various';
+
   return (
     <div
       onClick={onClick}
       className={`
-        bg-white rounded-card border overflow-hidden transition-all cursor-pointer hover:-translate-y-0.5 hover:shadow-card-hover
-        ${selected
-          ? 'border-saffron shadow-[0_0_0_3px_#FEF3DC]'
-          : 'border-border hover:border-saffron/50'
-        }
+        bg-white rounded-2xl overflow-hidden border transition-all cursor-pointer shadow-sm
+        hover:-translate-y-0.5 hover:shadow-md
+        ${selected ? 'border-saffron shadow-[0_0_0_3px_#FEF3C7]' : 'border-[#E8DFD0] hover:border-saffron/50'}
       `}
     >
-      {/* Photo */}
-      <div className="h-[220px] bg-amber-bg w-full overflow-hidden">
+      {/* Photo + cuisine badge */}
+      <div className="relative aspect-video">
         {post.photo_url ? (
-          <Image
-            src={post.photo_url}
-            alt={post.dish_name}
-            width={400}
-            height={220}
-            className="object-cover w-full h-full"
-          />
+          <Image src={post.photo_url} alt={post.dish_name} fill className="object-cover" />
         ) : (
-          <div className="flex items-center justify-center w-full h-full text-6xl">🍽️</div>
+          <div className="flex items-center justify-center w-full h-full bg-[#FFFBF5] text-4xl">🍽️</div>
         )}
+        <span className="absolute top-3 left-3 bg-white/90 backdrop-blur-sm text-xs font-semibold px-2.5 py-1 rounded-full shadow-sm text-[#1A1207]">
+          {flag} {cuisine}
+        </span>
       </div>
 
+      {/* Info */}
       <div className="p-4">
         {/* Chef row */}
         {chef && (
-          <Link href={`/chefs/${chef.id}`} className="flex items-center gap-2 mb-3 group">
-            <div className="w-7 h-7 rounded-full overflow-hidden bg-amber-bg flex items-center justify-center flex-shrink-0">
+          <div className="flex items-center justify-between mb-3">
+            <Link href={`/chefs/${chef.id}`} onClick={e => e.stopPropagation()} className="flex items-center gap-2 group">
               {chef.photo_url ? (
-                <Image src={chef.photo_url} alt={chef.name} width={28} height={28} className="object-cover w-full h-full" />
-              ) : <span className="text-sm">👩‍🍳</span>}
-            </div>
-            <span className="font-medium text-sm text-dark group-hover:underline">{chef.name}</span>
-            {chef.from_city && (
-              <span className="text-xs text-muted">From {chef.from_city}</span>
-            )}
-            <span className="ml-auto text-xs bg-cream-dark text-muted px-2 py-0.5 rounded-chip">{chef.area}</span>
-          </Link>
+                <Image src={chef.photo_url} alt={chef.name} width={32} height={32} className="rounded-full object-cover" />
+              ) : (
+                <div className="w-8 h-8 rounded-full bg-[#FFFBF5] flex items-center justify-center text-xs">👩‍🍳</div>
+              )}
+              <div>
+                <p className="text-sm font-semibold text-[#1A1207] group-hover:underline">{chef.name}</p>
+                <p className="text-xs text-[#7A6550]">{chef.area}</p>
+              </div>
+            </Link>
+            <span className="text-xs text-[#7A6550] whitespace-nowrap ml-2">{timeAgo(post.created_at)}</span>
+          </div>
         )}
 
-        {/* Dish name */}
-        <h3 className="font-display text-lg font-bold text-dark mb-1">{post.dish_name}</h3>
-
-        {/* Cultural note */}
-        {post.cultural_note && (
-          <p className="text-sm text-muted italic leading-relaxed line-clamp-2 mb-3">
-            &ldquo;{post.cultural_note}&rdquo;
+        <h3 className="font-display text-xl font-bold mb-2 text-[#1A1207]">{post.dish_name}</h3>
+        
+        {/* Quote or cultural note */}
+        {(post as any).quote || post.cultural_note ? (
+          <p className="text-sm italic text-[#3D2C1A] mb-4 line-clamp-3">
+            "{((post as any).quote || post.cultural_note)}"
           </p>
-        )}
+        ) : <div className="mb-4"></div>}
 
-        {/* Footer */}
-        <div className="flex items-center justify-between mt-2">
-          <span className="text-xs text-muted">{timeAgo(post.created_at)}</span>
-          {chef && (
-            <WhatsAppButton chef={chef as Chef} size="sm" label="Say hello" />
-          )}
-        </div>
+        {chef && (
+          <WhatsAppButton 
+            chef={chef as Chef} 
+            size="md" 
+            label="💬 Say hello" 
+            className="w-full justify-center bg-green-500 hover:bg-green-600 text-white rounded-xl shadow-sm border-0 font-semibold" 
+          />
+        )}
       </div>
     </div>
   )

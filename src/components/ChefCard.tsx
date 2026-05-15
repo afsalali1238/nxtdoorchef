@@ -16,57 +16,57 @@ interface ChefCardProps {
 }
 
 export default function ChefCard({ chef, selected, onClick }: ChefCardProps) {
-  const flag = CUISINES.find(c => c.name === chef.cuisine_type)?.emoji || '🌍'
   const fallbackPhoto = 'https://images.unsplash.com/photo-1585937421612-70a008356fbe?q=80&w=400&auto=format&fit=crop'
   const photo = chef.photo_url || fallbackPhoto
+  const flag = (chef.cuisine_flag as string) || CUISINES.find(c => c.name === chef.cuisine_type)?.emoji || '🌍'
 
   return (
     <div
       onClick={onClick}
       className={`
-        bg-white border rounded-[16px] overflow-hidden transition-all cursor-pointer shadow-[0_4px_20px_rgba(26,10,0,.07)]
-        hover:-translate-y-0.5 hover:shadow-card-hover
+        bg-white rounded-2xl overflow-hidden shadow-sm border transition-all cursor-pointer
+        hover:-translate-y-0.5 hover:shadow-md
         ${selected
           ? 'border-saffron shadow-[0_0_0_3px_#FEF3C7]'
-          : 'border-border hover:border-saffron/50'
+          : 'border-[#E8DFD0] hover:border-saffron/50'
         }
       `}
     >
-      <div className="relative h-[130px] bg-spice overflow-hidden">
+      <div className="relative aspect-[3/4]">
         <Image src={photo} alt={chef.name} fill className="object-cover" />
-        <div className="absolute inset-0 bg-gradient-to-t from-dark/80 via-dark/10 to-transparent" />
+        <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-black/20 to-transparent" />
         
-        <span className="absolute top-2.5 left-2.5 text-xl bg-black/40 backdrop-blur-sm px-1.5 py-0.5 rounded-lg">
-          {flag}
+        <span className="absolute top-3 left-3 bg-white/90 backdrop-blur-sm text-[#1A1207] text-xs font-semibold px-2.5 py-1 rounded-full shadow-sm">
+          {flag} {chef.cuisine_type}
         </span>
         
-        <span className="absolute top-2.5 right-2.5 text-[10px] font-bold bg-verified text-white px-2 py-0.5 rounded-full shadow-sm">
-          🏛 Licensed
-        </span>
-        
-        <div className="absolute bottom-2.5 left-3 text-white">
-          <h3 className="text-[15px] font-bold drop-shadow-md">{chef.name}</h3>
+        <div className="absolute bottom-4 left-4 right-4 text-white">
+          <h3 className="font-display text-2xl font-bold mb-1">{chef.name}</h3>
+          <p className="text-sm text-white/90">{chef.area} • {chef.from_city || 'Dubai'}</p>
         </div>
       </div>
 
-      <div className="p-3">
-        <div className="text-[11px] text-muted mb-1 font-medium">📍 {chef.area}, Dubai</div>
-        
+      <div className="p-4">
         {chef.specialty && (
-          <p className="text-xs text-ink-mid leading-relaxed mb-3 line-clamp-2">
+          <p className="text-sm text-[#7A6550] line-clamp-2 mb-4 leading-relaxed">
             {chef.specialty}
           </p>
         )}
         
-        <div className="flex items-center justify-between mt-auto">
+        <div className="grid grid-cols-2 gap-2">
           <Link
             href={`/chefs/${chef.id}`}
             onClick={e => e.stopPropagation()}
-            className="text-xs text-saffron font-medium hover:text-[#b86505] transition-colors"
+            className="bg-[#F5F0E8] text-[#1A1207] text-center py-2.5 rounded-xl text-sm font-semibold hover:bg-[#E8DFD0] transition-colors"
           >
-            View profile →
+            View profile
           </Link>
-          <WhatsAppButton chef={chef} size="sm" />
+          <WhatsAppButton 
+            chef={chef} 
+            size="md" 
+            label="Message" 
+            className="justify-center bg-green-500 hover:bg-green-600 text-white rounded-xl shadow-sm border-0 font-semibold" 
+          />
         </div>
       </div>
     </div>
