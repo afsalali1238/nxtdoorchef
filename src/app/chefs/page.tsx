@@ -100,7 +100,7 @@ export default async function ChefsPage({
           <div className="relative z-10">
             <h3 className="font-display text-xl font-bold text-white mb-2">Your kitchen could be next</h3>
             <p className="text-sm text-white/70 mb-4">Join home cooks across Dubai celebrating their culture.</p>
-            <a href="/join" className="inline-block bg-[#D4780A] text-white px-6 py-3 rounded-lg text-sm font-bold hover:bg-[#b86505] transition-colors">
+            <a href="/survey" className="inline-block bg-[#D4780A] text-white px-6 py-3 rounded-lg text-sm font-bold hover:bg-[#b86505] transition-colors">
               Share your culture
             </a>
           </div>

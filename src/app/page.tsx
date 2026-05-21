@@ -203,7 +203,7 @@ export default async function HomePage() {
               </p>
             </div>
             <div className="flex gap-4 flex-shrink-0 relative z-10 w-full md:w-auto flex-col sm:flex-row">
-              <Link href="/join" className="bg-saffron text-white px-8 py-4 rounded-lg text-sm font-bold hover:bg-[#b86505] transition-colors text-center shadow-lg">
+              <Link href="/survey" className="bg-saffron text-white px-8 py-4 rounded-lg text-sm font-bold hover:bg-[#b86505] transition-colors text-center shadow-lg">
                 Become a home chef
               </Link>
               <Link href="/chefs" className="bg-white/10 border border-white/20 text-white px-8 py-4 rounded-lg text-sm font-bold hover:bg-white/20 transition-colors text-center">

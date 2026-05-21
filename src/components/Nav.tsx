@@ -44,10 +44,11 @@ export default function Nav() {
       <div className="ml-auto flex items-center gap-3">
         <span className="text-sm text-muted hidden sm:block">📍 Dubai, UAE</span>
         <Link
-          href="/join"
-          className="bg-terra text-white px-5 py-2 rounded-lg text-sm font-medium hover:opacity-90 transition-opacity"
+          href="/survey"
+          className="bg-saffron hover:bg-terra text-white text-sm font-semibold
+            px-4 py-2 rounded-chip transition-colors"
         >
-          Share your culture
+          Join as chef
         </Link>
       </div>
     </nav>
